@@ -55,11 +55,14 @@ export function EmployeeDetailsModal({
       return;
     }
 
+    if (!employee) return; /// Add safety check for employee existence
+
     onAddAdvance(employee.id, advanceDay, amount);
     setAdvanceAmount("");
   }
 
   function handleDeleteEmployee() {
+    if (!employee) return; /// Add safety check for employee existence
     const shouldDelete = window.confirm(
       `Видалити працівника ${employee.name}? Цю дію не можна скасувати.`,
     );
