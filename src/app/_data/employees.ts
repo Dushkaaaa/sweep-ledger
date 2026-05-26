@@ -1,11 +1,17 @@
+import {
+  dictionaries,
+  type DayKey,
+  type LanguageCode,
+} from "../_i18n/translations";
+
 export const workDays = [
-  { key: "monday", label: "Понеділок" },
-  { key: "tuesday", label: "Вівторок" },
-  { key: "wednesday", label: "Середа" },
-  { key: "thursday", label: "Четвер" },
-  { key: "friday", label: "П'ятниця" },
-  { key: "saturday", label: "Субота" },
-  { key: "sunday", label: "Неділя" },
+  { key: "monday" },
+  { key: "tuesday" },
+  { key: "wednesday" },
+  { key: "thursday" },
+  { key: "friday" },
+  { key: "saturday" },
+  { key: "sunday" },
 ] as const;
 
 export type WorkDayKey = (typeof workDays)[number]["key"];
@@ -37,7 +43,7 @@ export type Employee = {
   name: string;
   role: string;
   hourlyRate: number;
-  status: "Активний";
+  status: "active";
   currentWeekId: string | null;
   currentWeekStartDate: string | null;
   workLog: WorkLog;
@@ -60,6 +66,10 @@ export type MonthSummary = {
   pendingPay: number;
 };
 
+function getLocale(language: LanguageCode) {
+  return language === "uk" ? "uk-UA" : language === "pl" ? "pl-PL" : "en-US";
+}
+
 export function createEmptyWorkLog(): WorkLog {
   return {
     monday: 0,
@@ -80,22 +90,26 @@ export function getWorkedDaysCount(workLog: WorkLog) {
   return Object.values(workLog).filter((hours) => hours > 0).length;
 }
 
-export function getShiftSummary(workLog: WorkLog) {
+export function getShiftSummary(
+  workLog: WorkLog,
+  language: LanguageCode = "uk",
+) {
   const workedDays = getWorkedDaysCount(workLog);
+  const labels = dictionaries[language].shiftSummary;
 
   if (workedDays === 0) {
-    return "Без змін цього тижня";
+    return labels.none;
   }
 
   if (workedDays === 1) {
-    return "1 зміна цього тижня";
+    return labels.one;
   }
 
   if (workedDays >= 2 && workedDays <= 4) {
-    return `${workedDays} зміни цього тижня`;
+    return labels.few.replace("{count}", String(workedDays));
   }
 
-  return `${workedDays} змін цього тижня`;
+  return labels.many.replace("{count}", String(workedDays));
 }
 
 export function getTotalAdvances(advances: Advance[]) {
@@ -112,8 +126,11 @@ export function getPendingPay(
   return Math.max(0, getGrossPay(employee) - getTotalAdvances(employee.advances));
 }
 
-export function getWorkDayLabel(day: WorkDayKey) {
-  return workDays.find((item) => item.key === day)?.label ?? day;
+export function getWorkDayLabel(
+  day: WorkDayKey,
+  language: LanguageCode = "uk",
+) {
+  return dictionaries[language].days[day as DayKey] ?? day;
 }
 
 export function getMonthKey(date: Date) {
@@ -122,15 +139,15 @@ export function getMonthKey(date: Date) {
   return `${date.getFullYear()}-${month}`;
 }
 
-export function getMonthLabel(date: Date) {
-  return new Intl.DateTimeFormat("uk-UA", {
+export function getMonthLabel(date: Date, language: LanguageCode = "uk") {
+  return new Intl.DateTimeFormat(getLocale(language), {
     month: "long",
     year: "numeric",
   }).format(date);
 }
 
-export function getDateLabel(date: Date) {
-  return new Intl.DateTimeFormat("uk-UA", {
+export function getDateLabel(date: Date, language: LanguageCode = "uk") {
+  return new Intl.DateTimeFormat(getLocale(language), {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -140,9 +157,10 @@ export function getDateLabel(date: Date) {
 export function getCurrentMonthSummary(
   employee: Employee,
   referenceDate: Date = new Date(),
+  language: LanguageCode = "uk",
 ): MonthSummary {
   const currentMonthKey = getMonthKey(referenceDate);
-  const currentMonthLabel = getMonthLabel(referenceDate);
+  const currentMonthLabel = getMonthLabel(referenceDate, language);
 
   const archiveSummary = employee.weekHistory
     .filter((entry) => entry.monthKey === currentMonthKey)

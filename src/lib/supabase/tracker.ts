@@ -140,7 +140,7 @@ function buildEmployee(
     name: employeeRow.name,
     role: employeeRow.role,
     hourlyRate: Number(employeeRow.hourly_rate),
-    status: "Активний",
+    status: "active",
     currentWeekId: openWeek?.id ?? null,
     currentWeekStartDate: openWeek?.week_start_date ?? null,
     workLog: openWeek ? mapWeekRowToWorkLog(openWeek) : createEmptyWorkLog(),

@@ -3,24 +3,15 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { LanguageSwitcher } from "../_components/language-switcher";
 import { SiteFooter } from "../_components/site-footer";
+import { useLanguage } from "../_i18n/language-provider";
 import { supabase } from "@/lib/supabase/client";
 import { ensureProfile } from "@/lib/supabase/profiles";
 
-const benefits = [
-  "Керуй працівниками, ставками та авансами в одному місці",
-  "Закривай тиждень і автоматично збирай місячний підсумок",
-  "Запускай облік для своєї клінінгової команди без складної CRM",
-];
-
-const highlights = [
-  { label: "Для кого", value: "Власники клінінгових команд" },
-  { label: "Формат", value: "Швидкий інструмент для менеджменту" },
-  { label: "Статус", value: "Ранній MVP" },
-];
-
 export default function SignUpPage() {
   const router = useRouter();
+  const { language, t } = useLanguage();
   const [fullName, setFullName] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [email, setEmail] = useState("");
@@ -37,12 +28,12 @@ export default function SignUpPage() {
     setSuccessMessage("");
 
     if (password !== confirmPassword) {
-      setErrorMessage("Паролі не співпадають.");
+      setErrorMessage(t.auth.passwordsMismatch);
       return;
     }
 
     if (password.length < 8) {
-      setErrorMessage("Пароль має містити щонайменше 8 символів.");
+      setErrorMessage(t.auth.passwordTooShort);
       return;
     }
 
@@ -56,6 +47,7 @@ export default function SignUpPage() {
           full_name: fullName,
           company_name: companyName,
           phone,
+          preferred_language: language,
         },
       },
     });
@@ -75,7 +67,7 @@ export default function SignUpPage() {
         const message =
           profileError instanceof Error
             ? profileError.message
-            : "Не вдалося створити профіль власника.";
+            : t.auth.profileSignUpError;
         setErrorMessage(message);
       } finally {
         setIsSubmitting(false);
@@ -84,9 +76,7 @@ export default function SignUpPage() {
       return;
     }
 
-    setSuccessMessage(
-      "Акаунт створено. Перевір пошту та підтвердь email, якщо Supabase просить підтвердження.",
-    );
+    setSuccessMessage(t.auth.success);
     setIsSubmitting(false);
   }
 
@@ -95,27 +85,29 @@ export default function SignUpPage() {
       <section className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-10">
         <div className="flex flex-col justify-between gap-6 rounded-[2rem] bg-linear-to-br from-slate-950 via-sky-900 to-cyan-600 p-6 text-white shadow-[0_30px_90px_-40px_rgba(2,132,199,0.55)] sm:p-8">
           <div>
-            <Link
-              href="/"
-              className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white/90 transition hover:bg-white/15"
-            >
-              ← Назад до трекера
-            </Link>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <Link
+                href="/"
+                className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white/90 transition hover:bg-white/15"
+              >
+                {t.common.backToTracker}
+              </Link>
+              <LanguageSwitcher variant="dark" />
+            </div>
 
             <p className="mt-8 text-sm font-medium uppercase tracking-[0.28em] text-cyan-100/70">
-              Реєстрація Власника
+              {t.auth.ownerSignUp}
             </p>
             <h1 className="mt-4 max-w-xl text-4xl font-semibold tracking-tight sm:text-5xl">
-              Створи акаунт і керуй командою без хаосу в таблицях
+              {t.auth.signUpTitle}
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-7 text-cyan-50/90">
-              Окрема сторінка для власників вже підключена до Supabase Auth і
-              готова стати основою для реального SaaS-кабінету.
+              {t.auth.signUpDescription}
             </p>
           </div>
 
           <div className="grid gap-3">
-            {benefits.map((benefit) => (
+            {t.auth.benefitsSignUp.map((benefit) => (
               <div
                 key={benefit}
                 className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm"
@@ -126,57 +118,60 @@ export default function SignUpPage() {
           </div>
 
           <div className="grid gap-3 sm:grid-cols-3">
-            {highlights.map((item) => (
+            {t.auth.highlightsSignUp.map(([label, value]) => (
               <div
-                key={item.label}
+                key={label}
                 className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm"
               >
                 <p className="text-xs uppercase tracking-[0.18em] text-white/65">
-                  {item.label}
+                  {label}
                 </p>
-                <p className="mt-2 text-sm font-semibold text-white">
-                  {item.value}
-                </p>
+                <p className="mt-2 text-sm font-semibold text-white">{value}</p>
               </div>
             ))}
           </div>
         </div>
 
         <section className="rounded-[2rem] border border-slate-200/70 bg-white/90 p-5 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.3)] backdrop-blur sm:p-6 lg:p-8">
+          <div className="mb-6 flex justify-end">
+            <LanguageSwitcher />
+          </div>
+
           <div>
-            <p className="text-sm font-medium text-sky-600">Початок роботи</p>
+            <p className="text-sm font-medium text-sky-600">
+              {t.auth.gettingStarted}
+            </p>
             <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
-              Зареєструвати власника
+              {t.auth.signUpFormTitle}
             </h2>
             <p className="mt-3 text-sm leading-6 text-slate-500">
-              Після успішної реєстрації власник отримає акаунт у Supabase Auth,
-              а профіль компанії збережеться в таблиці `profiles`.
+              {t.auth.signUpFormDescription}
             </p>
           </div>
 
           <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
             <label className="block">
               <span className="mb-2 block text-sm font-medium text-slate-700">
-                Ім’я та прізвище
+                {t.auth.fullName}
               </span>
               <input
                 type="text"
                 value={fullName}
                 onChange={(event) => setFullName(event.target.value)}
-                placeholder="Наприклад Олександр Іванов"
+                placeholder={t.auth.fullNamePlaceholder}
                 className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               />
             </label>
 
             <label className="block">
               <span className="mb-2 block text-sm font-medium text-slate-700">
-                Назва компанії
+                {t.auth.companyName}
               </span>
               <input
                 type="text"
                 value={companyName}
                 onChange={(event) => setCompanyName(event.target.value)}
-                placeholder="Наприклад Blue Spark Cleaning"
+                placeholder={t.auth.companyPlaceholder}
                 className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               />
             </label>
@@ -184,7 +179,7 @@ export default function SignUpPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="block">
                 <span className="mb-2 block text-sm font-medium text-slate-700">
-                  Email
+                  {t.common.email}
                 </span>
                 <input
                   type="email"
@@ -197,7 +192,7 @@ export default function SignUpPage() {
 
               <label className="block">
                 <span className="mb-2 block text-sm font-medium text-slate-700">
-                  Телефон
+                  {t.common.phone}
                 </span>
                 <input
                   type="tel"
@@ -212,26 +207,26 @@ export default function SignUpPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="block">
                 <span className="mb-2 block text-sm font-medium text-slate-700">
-                  Пароль
+                  {t.common.password}
                 </span>
                 <input
                   type="password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
-                  placeholder="Мінімум 8 символів"
+                  placeholder={t.auth.minPasswordPlaceholder}
                   className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
                 />
               </label>
 
               <label className="block">
                 <span className="mb-2 block text-sm font-medium text-slate-700">
-                  Повторити пароль
+                  {t.auth.repeatPassword}
                 </span>
                 <input
                   type="password"
                   value={confirmPassword}
                   onChange={(event) => setConfirmPassword(event.target.value)}
-                  placeholder="Повтори пароль"
+                  placeholder={t.auth.repeatPasswordPlaceholder}
                   className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
                 />
               </label>
@@ -254,17 +249,17 @@ export default function SignUpPage() {
               disabled={isSubmitting}
               className="w-full rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
             >
-              {isSubmitting ? "Створюємо акаунт..." : "Створити акаунт власника"}
+              {isSubmitting ? t.auth.creating : t.auth.createOwner}
             </button>
           </form>
 
           <p className="mt-5 text-sm text-slate-500">
-            Уже маєш акаунт?{" "}
+            {t.auth.hasAccount}{" "}
             <Link
               href="/sign-in"
               className="font-medium text-sky-700 hover:text-sky-800"
             >
-              Увійти
+              {t.home.signIn}
             </Link>
           </p>
         </section>

@@ -1,4 +1,5 @@
 import type { User } from "@supabase/supabase-js";
+import type { LanguageCode } from "@/app/_i18n/translations";
 import { supabase } from "./client";
 
 export type OwnerProfile = {
@@ -6,8 +7,13 @@ export type OwnerProfile = {
   full_name: string | null;
   company_name: string | null;
   phone: string | null;
+  preferred_language: LanguageCode | null;
   created_at: string;
 };
+
+function isLanguageCode(value: unknown): value is LanguageCode {
+  return value === "uk" || value === "en" || value === "pl";
+}
 
 export async function ensureProfile(user: User) {
   const fullName =
@@ -22,14 +28,28 @@ export async function ensureProfile(user: User) {
     typeof user.user_metadata.phone === "string"
       ? user.user_metadata.phone
       : null;
+  const preferredLanguage = isLanguageCode(user.user_metadata.preferred_language)
+    ? user.user_metadata.preferred_language
+    : null;
+  const profile: {
+    id: string;
+    full_name: string | null;
+    company_name: string | null;
+    phone: string | null;
+    preferred_language?: LanguageCode;
+  } = {
+    id: user.id,
+    full_name: fullName,
+    company_name: companyName,
+    phone,
+  };
+
+  if (preferredLanguage) {
+    profile.preferred_language = preferredLanguage;
+  }
 
   const { error } = await supabase.from("profiles").upsert(
-    {
-      id: user.id,
-      full_name: fullName,
-      company_name: companyName,
-      phone,
-    },
+    profile,
     {
       onConflict: "id",
     },
@@ -52,4 +72,38 @@ export async function fetchProfile(userId: string) {
   }
 
   return data as OwnerProfile | null;
+}
+
+export async function updateProfileLanguage(language: LanguageCode) {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError) {
+    throw userError;
+  }
+
+  if (!user) {
+    return;
+  }
+
+  const { error: metadataError } = await supabase.auth.updateUser({
+    data: {
+      preferred_language: language,
+    },
+  });
+
+  if (metadataError) {
+    throw metadataError;
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ preferred_language: language })
+    .eq("id", user.id);
+
+  if (error) {
+    throw error;
+  }
 }

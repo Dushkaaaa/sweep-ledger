@@ -1,3 +1,5 @@
+"use client";
+
 import {
   type Employee,
   getCurrentMonthSummary,
@@ -7,6 +9,7 @@ import {
   getTotalAdvances,
   getTotalHours,
 } from "../_data/employees";
+import { useLanguage } from "../_i18n/language-provider";
 
 type EmployeeCardProps = {
   employee: Employee;
@@ -14,12 +17,13 @@ type EmployeeCardProps = {
 };
 
 export function EmployeeCard({ employee, onClick }: EmployeeCardProps) {
+  const { language, t } = useLanguage();
   const weekHours = getTotalHours(employee.workLog);
   const progress = Math.min((weekHours / 40) * 100, 100);
   const grossPay = getGrossPay(employee);
   const advances = getTotalAdvances(employee.advances);
   const pending = getPendingPay(employee);
-  const monthSummary = getCurrentMonthSummary(employee);
+  const monthSummary = getCurrentMonthSummary(employee, new Date(), language);
 
   return (
     <button
@@ -42,20 +46,20 @@ export function EmployeeCard({ employee, onClick }: EmployeeCardProps) {
           </div>
 
           <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-            До виплати {pending} PLN
+            {t.card.pending} {pending} {t.common.currency}
           </span>
         </div>
 
         <div className="mt-5 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="text-sm text-slate-500">Поточний тиждень</p>
+              <p className="text-sm text-slate-500">{t.card.currentWeek}</p>
               <p className="mt-1 text-2xl font-semibold text-slate-900">
-                {weekHours} год
+                {weekHours} {t.common.hoursShort}
               </p>
             </div>
             <p className="text-right text-sm font-medium text-emerald-600">
-              {getShiftSummary(employee.workLog)}
+              {getShiftSummary(employee.workLog, language)}
             </p>
           </div>
 
@@ -69,32 +73,35 @@ export function EmployeeCard({ employee, onClick }: EmployeeCardProps) {
 
         <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
           <div className="rounded-2xl bg-slate-900 p-4 text-white">
-            <dt className="text-white/65">Ставка</dt>
+            <dt className="text-white/65">{t.card.rate}</dt>
             <dd className="mt-2 text-lg font-semibold">
-              {employee.hourlyRate} PLN/год
+              {employee.hourlyRate} {t.common.currency}/{t.common.hoursShort}
             </dd>
           </div>
           <div className="rounded-2xl bg-sky-50 p-4 text-slate-900 ring-1 ring-sky-100">
-            <dt className="text-slate-500">Аванси</dt>
-            <dd className="mt-2 text-lg font-semibold">{advances} PLN</dd>
+            <dt className="text-slate-500">{t.card.advances}</dt>
+            <dd className="mt-2 text-lg font-semibold">
+              {advances} {t.common.currency}
+            </dd>
           </div>
         </dl>
 
         <div className="mt-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
-          Нараховано{" "}
-          <span className="font-semibold text-slate-900">{grossPay} PLN</span>
-        </div>
-
-        <div className="mt-3 rounded-2xl border border-sky-100 bg-sky-50 px-4 py-3 text-sm text-slate-600">
-          За місяць{" "}
+          {t.card.gross}{" "}
           <span className="font-semibold text-slate-900">
-            {monthSummary.totalHours} год / {monthSummary.pendingPay} PLN
+            {grossPay} {t.common.currency}
           </span>
         </div>
 
-        <p className="mt-4 text-sm font-medium text-sky-700">
-          Натисни, щоб переглянути деталі, історію тижнів і підсумок за місяць
-        </p>
+        <div className="mt-3 rounded-2xl border border-sky-100 bg-sky-50 px-4 py-3 text-sm text-slate-600">
+          {t.card.month}{" "}
+          <span className="font-semibold text-slate-900">
+            {monthSummary.totalHours} {t.common.hoursShort} /{" "}
+            {monthSummary.pendingPay} {t.common.currency}
+          </span>
+        </div>
+
+        <p className="mt-4 text-sm font-medium text-sky-700">{t.card.details}</p>
       </div>
     </button>
   );

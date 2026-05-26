@@ -13,6 +13,7 @@ import {
   getWorkDayLabel,
   workDays,
 } from "../_data/employees";
+import { useLanguage } from "../_i18n/language-provider";
 
 type EmployeeDetailsModalProps = {
   employee: Employee | null;
@@ -35,6 +36,7 @@ export function EmployeeDetailsModal({
   onAddAdvance,
   onRemoveAdvance,
 }: EmployeeDetailsModalProps) {
+  const { language, t } = useLanguage();
   const [advanceDay, setAdvanceDay] = useState<WorkDayKey>("monday");
   const [advanceAmount, setAdvanceAmount] = useState("");
 
@@ -43,12 +45,11 @@ export function EmployeeDetailsModal({
   }
 
   const safeEmployee = employee;
-
   const totalHours = getTotalHours(safeEmployee.workLog);
   const grossPay = getGrossPay(safeEmployee);
   const totalAdvances = getTotalAdvances(safeEmployee.advances);
   const pendingPay = getPendingPay(safeEmployee);
-  const monthSummary = getCurrentMonthSummary(safeEmployee);
+  const monthSummary = getCurrentMonthSummary(safeEmployee, new Date(), language);
 
   function handleAddAdvance() {
     const amount = Number(advanceAmount);
@@ -62,9 +63,8 @@ export function EmployeeDetailsModal({
   }
 
   function handleDeleteEmployee() {
-    if (!employee) return; /// Add safety check for employee existence
     const shouldDelete = window.confirm(
-      `Видалити працівника ${safeEmployee.name}? Цю дію не можна скасувати.`,
+      t.details.confirmDelete.replace("{name}", safeEmployee.name),
     );
 
     if (!shouldDelete) {
@@ -84,7 +84,7 @@ export function EmployeeDetailsModal({
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <p className="text-sm uppercase tracking-[0.2em] text-white/70">
-                  Деталі працівника
+                  {t.details.eyebrow}
                 </p>
                 <h3 className="mt-2 text-3xl font-semibold">{safeEmployee.name}</h3>
                 <p className="mt-2 text-sm text-cyan-50/90">{safeEmployee.role}</p>
@@ -95,31 +95,15 @@ export function EmployeeDetailsModal({
                 onClick={onClose}
                 className="w-full rounded-2xl border border-white/25 bg-white/12 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/20 sm:w-auto"
               >
-                Закрити
+                {t.common.close}
               </button>
             </div>
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              <div className="rounded-3xl border border-white/18 bg-white/14 p-4 backdrop-blur-sm">
-                <p className="text-sm text-white/75">Ставка</p>
-                <p className="mt-2 text-2xl font-semibold">
-                  {employee.hourlyRate} PLN
-                </p>
-              </div>
-              <div className="rounded-3xl border border-white/18 bg-white/14 p-4 backdrop-blur-sm">
-                <p className="text-sm text-white/75">Усього годин</p>
-                <p className="mt-2 text-2xl font-semibold">{totalHours} год</p>
-              </div>
-              <div className="rounded-3xl border border-white/18 bg-white/14 p-4 backdrop-blur-sm">
-                <p className="text-sm text-white/75">Аванси</p>
-                <p className="mt-2 text-2xl font-semibold">
-                  {totalAdvances} PLN
-                </p>
-              </div>
-              <div className="rounded-3xl border border-white/18 bg-white/14 p-4 backdrop-blur-sm">
-                <p className="text-sm text-white/75">До виплати</p>
-                <p className="mt-2 text-2xl font-semibold">{pendingPay} PLN</p>
-              </div>
+              <HeroStat label={t.details.rate} value={`${employee.hourlyRate} ${t.common.currency}`} />
+              <HeroStat label={t.details.totalHours} value={`${totalHours} ${t.common.hoursShort}`} />
+              <HeroStat label={t.details.advances} value={`${totalAdvances} ${t.common.currency}`} />
+              <HeroStat label={t.details.pending} value={`${pendingPay} ${t.common.currency}`} />
             </div>
           </div>
 
@@ -128,11 +112,10 @@ export function EmployeeDetailsModal({
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <h4 className="text-lg font-semibold text-rose-900">
-                    Небезпечна дія
+                    {t.details.dangerTitle}
                   </h4>
                   <p className="mt-1 text-sm text-rose-700">
-                    Якщо працівник більше не потрібен, його можна видалити зі
-                    списку разом з поточними даними та історією.
+                    {t.details.dangerDescription}
                   </p>
                 </div>
 
@@ -141,29 +124,24 @@ export function EmployeeDetailsModal({
                   onClick={handleDeleteEmployee}
                   className="rounded-2xl bg-rose-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-rose-700"
                 >
-                  Видалити працівника
+                  {t.details.deleteEmployee}
                 </button>
               </div>
             </section>
 
             <section>
-              <div className="mb-5">
-                <h4 className="text-xl font-semibold text-slate-900">
-                  Поточний тиждень
-                </h4>
-                <p className="mt-1 text-sm text-slate-500">
-                  Години по днях автоматично сумуються, а суми перераховуються
-                  одразу.
-                </p>
-              </div>
+              <SectionHeading
+                title={t.details.currentWeek}
+                description={t.details.currentWeekDescription}
+              />
 
               <div className="mb-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                Нараховано{" "}
+                {t.card.gross}{" "}
                 <span className="font-semibold text-slate-900">
-                  {grossPay} PLN
+                  {grossPay} {t.common.currency}
                 </span>
                 {" · "}
-                {getShiftSummary(safeEmployee.workLog)}
+                {getShiftSummary(safeEmployee.workLog, language)}
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
@@ -173,7 +151,7 @@ export function EmployeeDetailsModal({
                     className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
                   >
                     <span className="block text-sm font-medium text-slate-700">
-                      {day.label}
+                      {getWorkDayLabel(day.key, language)}
                     </span>
                     <div className="mt-3 flex items-center gap-3">
                       <input
@@ -191,7 +169,7 @@ export function EmployeeDetailsModal({
                         className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base font-medium text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
                       />
                       <span className="text-sm font-medium text-slate-500">
-                        год
+                        {t.common.hoursShort}
                       </span>
                     </div>
                   </label>
@@ -200,20 +178,16 @@ export function EmployeeDetailsModal({
             </section>
 
             <section>
-              <div className="mb-5">
-                <h4 className="text-xl font-semibold text-slate-900">
-                  Аванси протягом тижня
-                </h4>
-                <p className="mt-1 text-sm text-slate-500">
-                  Додай день і суму. Аванс автоматично відніметься від виплати.
-                </p>
-              </div>
+              <SectionHeading
+                title={t.details.weeklyAdvances}
+                description={t.details.weeklyAdvancesDescription}
+              />
 
               <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
                 <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
                   <label className="block">
                     <span className="mb-2 block text-sm font-medium text-slate-700">
-                      День
+                      {t.details.day}
                     </span>
                     <select
                       value={advanceDay}
@@ -224,7 +198,7 @@ export function EmployeeDetailsModal({
                     >
                       {workDays.map((day) => (
                         <option key={day.key} value={day.key}>
-                          {day.label}
+                          {getWorkDayLabel(day.key, language)}
                         </option>
                       ))}
                     </select>
@@ -232,7 +206,7 @@ export function EmployeeDetailsModal({
 
                   <label className="block">
                     <span className="mb-2 block text-sm font-medium text-slate-700">
-                      Сума авансу
+                      {t.details.advanceAmount}
                     </span>
                     <input
                       type="number"
@@ -240,7 +214,7 @@ export function EmployeeDetailsModal({
                       step="1"
                       value={advanceAmount}
                       onChange={(event) => setAdvanceAmount(event.target.value)}
-                      placeholder="Наприклад 200"
+                      placeholder={t.details.advancePlaceholder}
                       className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
                     />
                   </label>
@@ -250,7 +224,7 @@ export function EmployeeDetailsModal({
                     onClick={handleAddAdvance}
                     className="self-end rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
                   >
-                    Додати аванс
+                    {t.details.addAdvance}
                   </button>
                 </div>
               </div>
@@ -258,7 +232,7 @@ export function EmployeeDetailsModal({
               <div className="mt-4 space-y-3">
                 {safeEmployee.advances.length === 0 ? (
                   <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-5 text-sm text-slate-500">
-                    Ще немає жодного авансу.
+                    {t.details.noAdvances}
                   </div>
                 ) : (
                   safeEmployee.advances.map((advance) => (
@@ -268,19 +242,20 @@ export function EmployeeDetailsModal({
                     >
                       <div>
                         <p className="font-medium text-slate-900">
-                          {getWorkDayLabel(advance.day)}
+                          {getWorkDayLabel(advance.day, language)}
                         </p>
                         <p className="mt-1 text-sm text-slate-500">
-                          Видано авансом {advance.amount} PLN
+                          {t.details.advanceIssued} {advance.amount}{" "}
+                          {t.common.currency}
                         </p>
                       </div>
 
                       <button
                         type="button"
-                        onClick={() => onRemoveAdvance(safeEmployee.id, safeEmployee.id)}
+                        onClick={() => onRemoveAdvance(safeEmployee.id, advance.id)}
                         className="rounded-2xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                       >
-                        Видалити
+                        {t.common.delete}
                       </button>
                     </div>
                   ))
@@ -289,59 +264,41 @@ export function EmployeeDetailsModal({
             </section>
 
             <section>
-              <div className="mb-5">
-                <h4 className="text-xl font-semibold text-slate-900">
-                  Підсумок за місяць
-                </h4>
-                <p className="mt-1 text-sm text-slate-500">
-                  У місячний підсумок входять усі закриті тижні цього місяця та
-                  поточний відкритий тиждень.
-                </p>
-              </div>
+              <SectionHeading
+                title={t.details.monthSummary}
+                description={t.details.monthSummaryDescription}
+              />
 
               <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm text-slate-500">{monthSummary.monthLabel}</p>
-                  <p className="mt-2 text-2xl font-semibold text-slate-900">
-                    {monthSummary.totalHours} год
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm text-slate-500">Нараховано</p>
-                  <p className="mt-2 text-2xl font-semibold text-slate-900">
-                    {monthSummary.grossPay} PLN
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm text-slate-500">Аванси</p>
-                  <p className="mt-2 text-2xl font-semibold text-slate-900">
-                    {monthSummary.advancesTotal} PLN
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm text-slate-500">До виплати</p>
-                  <p className="mt-2 text-2xl font-semibold text-slate-900">
-                    {monthSummary.pendingPay} PLN
-                  </p>
-                </div>
+                <SummaryStat
+                  label={monthSummary.monthLabel}
+                  value={`${monthSummary.totalHours} ${t.common.hoursShort}`}
+                />
+                <SummaryStat
+                  label={t.card.gross}
+                  value={`${monthSummary.grossPay} ${t.common.currency}`}
+                />
+                <SummaryStat
+                  label={t.details.advances}
+                  value={`${monthSummary.advancesTotal} ${t.common.currency}`}
+                />
+                <SummaryStat
+                  label={t.details.pending}
+                  value={`${monthSummary.pendingPay} ${t.common.currency}`}
+                />
               </div>
             </section>
 
             <section>
-              <div className="mb-5">
-                <h4 className="text-xl font-semibold text-slate-900">
-                  Історія тижнів
-                </h4>
-                <p className="mt-1 text-sm text-slate-500">
-                  Після закриття тижня години та підсумки потрапляють сюди, а
-                  поточний тиждень обнуляється.
-                </p>
-              </div>
+              <SectionHeading
+                title={t.details.weekHistory}
+                description={t.details.weekHistoryDescription}
+              />
 
               <div className="space-y-3">
                 {safeEmployee.weekHistory.length === 0 ? (
                   <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-5 text-sm text-slate-500">
-                    Ще немає жодного закритого тижня.
+                    {t.details.noClosedWeeks}
                   </div>
                 ) : (
                   safeEmployee.weekHistory.map((entry) => (
@@ -359,35 +316,23 @@ export function EmployeeDetailsModal({
                           </p>
                         </div>
                         <span className="rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
-                          {entry.totalHours} год
+                          {entry.totalHours} {t.common.hoursShort}
                         </span>
                       </div>
 
                       <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                        <div className="rounded-2xl bg-slate-50 p-3">
-                          <p className="text-xs uppercase tracking-wide text-slate-500">
-                            Нараховано
-                          </p>
-                          <p className="mt-2 font-semibold text-slate-900">
-                            {entry.grossPay} PLN
-                          </p>
-                        </div>
-                        <div className="rounded-2xl bg-slate-50 p-3">
-                          <p className="text-xs uppercase tracking-wide text-slate-500">
-                            Аванси
-                          </p>
-                          <p className="mt-2 font-semibold text-slate-900">
-                            {entry.advancesTotal} PLN
-                          </p>
-                        </div>
-                        <div className="rounded-2xl bg-slate-50 p-3">
-                          <p className="text-xs uppercase tracking-wide text-slate-500">
-                            До виплати
-                          </p>
-                          <p className="mt-2 font-semibold text-slate-900">
-                            {entry.pendingPay} PLN
-                          </p>
-                        </div>
+                        <HistoryStat
+                          label={t.card.gross}
+                          value={`${entry.grossPay} ${t.common.currency}`}
+                        />
+                        <HistoryStat
+                          label={t.details.advances}
+                          value={`${entry.advancesTotal} ${t.common.currency}`}
+                        />
+                        <HistoryStat
+                          label={t.details.pending}
+                          value={`${entry.pendingPay} ${t.common.currency}`}
+                        />
                       </div>
                     </article>
                   ))
@@ -397,6 +342,48 @@ export function EmployeeDetailsModal({
           </div>
         </section>
       </div>
+    </div>
+  );
+}
+
+function HeroStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-3xl border border-white/18 bg-white/14 p-4 backdrop-blur-sm">
+      <p className="text-sm text-white/75">{label}</p>
+      <p className="mt-2 text-2xl font-semibold">{value}</p>
+    </div>
+  );
+}
+
+function SectionHeading({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="mb-5">
+      <h4 className="text-xl font-semibold text-slate-900">{title}</h4>
+      <p className="mt-1 text-sm text-slate-500">{description}</p>
+    </div>
+  );
+}
+
+function SummaryStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <p className="text-sm text-slate-500">{label}</p>
+      <p className="mt-2 text-2xl font-semibold text-slate-900">{value}</p>
+    </div>
+  );
+}
+
+function HistoryStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl bg-slate-50 p-3">
+      <p className="text-xs uppercase tracking-wide text-slate-500">{label}</p>
+      <p className="mt-2 font-semibold text-slate-900">{value}</p>
     </div>
   );
 }

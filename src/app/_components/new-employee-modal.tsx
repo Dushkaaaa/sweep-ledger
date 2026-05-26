@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { NewEmployeeInput } from "../_data/employees";
+import { useLanguage } from "../_i18n/language-provider";
 
 type NewEmployeeModalProps = {
   isOpen: boolean;
@@ -14,6 +15,7 @@ export function NewEmployeeModal({
   onClose,
   onSubmit,
 }: NewEmployeeModalProps) {
+  const { t } = useLanguage();
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [hourlyRate, setHourlyRate] = useState("");
@@ -61,14 +63,13 @@ export function NewEmployeeModal({
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <p className="text-sm uppercase tracking-[0.2em] text-white/65">
-                  Новий працівник
+                  {t.newEmployee.eyebrow}
                 </p>
                 <h3 className="mt-2 text-3xl font-semibold">
-                  Додати до команди
+                  {t.newEmployee.title}
                 </h3>
                 <p className="mt-2 text-sm text-slate-200/85">
-                  Створимо нову картку зі ставкою, а години й аванси додаси
-                  пізніше.
+                  {t.newEmployee.description}
                 </p>
               </div>
 
@@ -77,7 +78,7 @@ export function NewEmployeeModal({
                 onClick={handleClose}
                 className="w-full rounded-2xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/16 sm:w-auto"
               >
-                Закрити
+                {t.common.close}
               </button>
             </div>
           </div>
@@ -85,33 +86,33 @@ export function NewEmployeeModal({
           <div className="space-y-4 p-5 sm:p-6">
             <label className="block">
               <span className="mb-2 block text-sm font-medium text-slate-700">
-                Ім’я працівника
+                {t.newEmployee.name}
               </span>
               <input
                 type="text"
                 value={name}
                 onChange={(event) => setName(event.target.value)}
-                placeholder="Наприклад Марія"
+                placeholder={t.newEmployee.namePlaceholder}
                 className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               />
             </label>
 
             <label className="block">
               <span className="mb-2 block text-sm font-medium text-slate-700">
-                Посада або тип роботи
+                {t.newEmployee.role}
               </span>
               <input
                 type="text"
                 value={role}
                 onChange={(event) => setRole(event.target.value)}
-                placeholder="Наприклад Генеральне прибирання"
+                placeholder={t.newEmployee.rolePlaceholder}
                 className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               />
             </label>
 
             <label className="block">
               <span className="mb-2 block text-sm font-medium text-slate-700">
-                Ставка за годину
+                {t.newEmployee.hourlyRate}
               </span>
               <div className="flex items-center gap-3">
                 <input
@@ -120,10 +121,12 @@ export function NewEmployeeModal({
                   step="1"
                   value={hourlyRate}
                   onChange={(event) => setHourlyRate(event.target.value)}
-                  placeholder="Наприклад 35"
+                  placeholder={t.newEmployee.ratePlaceholder}
                   className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
                 />
-                <span className="text-sm font-medium text-slate-500">PLN/год</span>
+                <span className="text-sm font-medium text-slate-500">
+                  {t.common.currency}/{t.common.hoursShort}
+                </span>
               </div>
             </label>
 
@@ -132,7 +135,7 @@ export function NewEmployeeModal({
               onClick={handleSubmit}
               className="w-full rounded-2xl bg-sky-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-700"
             >
-              Створити працівника
+              {t.newEmployee.create}
             </button>
           </div>
         </section>
