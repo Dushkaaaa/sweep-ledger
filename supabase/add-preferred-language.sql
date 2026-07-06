@@ -1,4 +1,12 @@
 alter table public.profiles
-add column if not exists preferred_language text
-check (preferred_language in ('uk', 'en', 'pl'));
+add column if not exists preferred_language text;
 
+alter table public.profiles
+drop constraint if exists profiles_preferred_language_check;
+
+alter table public.profiles
+add constraint profiles_preferred_language_check
+check (preferred_language in ('uk', 'en', 'de', 'pl'));
+
+alter table public.profiles
+add column if not exists logo_data_url text;

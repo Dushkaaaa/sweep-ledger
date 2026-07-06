@@ -9,8 +9,8 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "SweepLedger",
-  description: "Payroll and team tracking for cleaning businesses",
+  title: "Trackora",
+  description: "Team hours, payouts, advances, and weekly reporting for service businesses",
 };
 
 export default function RootLayout({

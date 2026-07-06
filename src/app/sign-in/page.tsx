@@ -52,7 +52,7 @@ export default function SignInPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,_#d8efff_0%,_#eef8ff_35%,_#ffffff_100%)]">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_18%_0%,_rgba(34,211,238,0.34)_0%,_rgba(224,247,255,0.74)_32%,_transparent_62%),linear-gradient(135deg,_#effcff_0%,_#dff7fb_42%,_#eef8ff_100%)]">
       <section className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-10">
         <div className="flex flex-col justify-between gap-6 rounded-[2rem] bg-linear-to-br from-slate-950 via-sky-900 to-cyan-600 p-6 text-white shadow-[0_30px_90px_-40px_rgba(2,132,199,0.55)] sm:p-8">
           <div>
@@ -127,7 +127,7 @@ export default function SignInPage() {
                 type="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                placeholder="owner@cleanandgo.com"
+                placeholder="team@company.com"
                 className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
               />
             </label>

@@ -8,11 +8,12 @@ export type OwnerProfile = {
   company_name: string | null;
   phone: string | null;
   preferred_language: LanguageCode | null;
+  logo_data_url: string | null;
   created_at: string;
 };
 
 function isLanguageCode(value: unknown): value is LanguageCode {
-  return value === "uk" || value === "en" || value === "pl";
+  return value === "uk" || value === "en" || value === "de" || value === "pl";
 }
 
 export async function ensureProfile(user: User) {
@@ -74,6 +75,40 @@ export async function fetchProfile(userId: string) {
   return data as OwnerProfile | null;
 }
 
+export async function updateProfileLogo(logoDataUrl: string | null) {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError) {
+    throw userError;
+  }
+
+  if (!user) {
+    return;
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ logo_data_url: logoDataUrl })
+    .eq("id", user.id);
+
+  if (error) {
+    throw error;
+  }
+}
+
+export async function updateOwnerPassword(password: string) {
+  const { error } = await supabase.auth.updateUser({
+    password,
+  });
+
+  if (error) {
+    throw error;
+  }
+}
+
 export async function updateProfileLanguage(language: LanguageCode) {
   const {
     data: { user },
@@ -88,6 +123,15 @@ export async function updateProfileLanguage(language: LanguageCode) {
     return;
   }
 
+  const { error } = await supabase
+    .from("profiles")
+    .update({ preferred_language: language })
+    .eq("id", user.id);
+
+  if (error) {
+    throw error;
+  }
+
   const { error: metadataError } = await supabase.auth.updateUser({
     data: {
       preferred_language: language,
@@ -96,14 +140,5 @@ export async function updateProfileLanguage(language: LanguageCode) {
 
   if (metadataError) {
     throw metadataError;
-  }
-
-  const { error } = await supabase
-    .from("profiles")
-    .update({ preferred_language: language })
-    .eq("id", user.id);
-
-  if (error) {
-    throw error;
   }
 }

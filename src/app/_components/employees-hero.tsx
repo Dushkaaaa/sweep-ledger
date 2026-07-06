@@ -1,10 +1,10 @@
 "use client";
 
 import { useLanguage } from "../_i18n/language-provider";
-import { LanguageSwitcher } from "./language-switcher";
 
 type EmployeesHeroProps = {
   companyName: string;
+  companyLogoDataUrl: string | null;
   employeesCount: number;
   currentWeekPending: number;
   currentWeekHours: number;
@@ -14,6 +14,7 @@ type EmployeesHeroProps = {
 
 export function EmployeesHero({
   companyName,
+  companyLogoDataUrl,
   employeesCount,
   currentWeekPending,
   currentWeekHours,
@@ -27,9 +28,19 @@ export function EmployeesHero({
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <p className="text-sm font-medium uppercase tracking-[0.28em] text-white/70">
-              {companyName}
-            </p>
+            <div className="flex items-center gap-3">
+              {companyLogoDataUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={companyLogoDataUrl}
+                  alt=""
+                  className="h-12 w-12 rounded-xl border border-white/20 bg-white object-contain p-1"
+                />
+              ) : null}
+              <p className="text-sm font-medium uppercase tracking-[0.28em] text-white/70">
+                {companyName}
+              </p>
+            </div>
             <h1 className="mt-3 max-w-xl text-3xl font-semibold tracking-tight sm:text-4xl">
               {t.hero.title}
             </h1>
@@ -38,14 +49,11 @@ export function EmployeesHero({
             </p>
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-start lg:flex-col">
-            <LanguageSwitcher variant="dark" />
-            <div className="rounded-3xl border border-white/20 bg-white/12 px-4 py-3 backdrop-blur-sm">
-              <p className="text-xs uppercase tracking-[0.2em] text-white/70">
-                {t.hero.active}
-              </p>
-              <p className="mt-2 text-3xl font-semibold">{employeesCount}</p>
-            </div>
+          <div className="rounded-3xl border border-white/20 bg-white/12 px-4 py-3 backdrop-blur-sm">
+            <p className="text-xs uppercase tracking-[0.2em] text-white/70">
+              {t.hero.active}
+            </p>
+            <p className="mt-2 text-3xl font-semibold">{employeesCount}</p>
           </div>
         </div>
 

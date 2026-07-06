@@ -13,7 +13,7 @@ export function SiteFooter() {
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.2fr_0.8fr_0.8fr] lg:px-8">
         <div>
           <p className="text-sm font-medium uppercase tracking-[0.28em] text-sky-600">
-            SweepLedger
+            Trackora
           </p>
           <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-900">
             {t.footer.title}

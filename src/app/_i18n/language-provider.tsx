@@ -5,7 +5,7 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 import {
@@ -22,19 +22,16 @@ type LanguageContextValue = {
   t: Dictionary;
 };
 
-const storageKey = "sweepledger-language";
+const storageKey = "trackora-language";
+const languageChangeEvent = "trackora-language-change";
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 export function isLanguageCode(value: string | null): value is LanguageCode {
-  return value === "uk" || value === "en" || value === "pl";
+  return value === "uk" || value === "en" || value === "de" || value === "pl";
 }
 
 function getBrowserLanguage() {
-  if (typeof window === "undefined") {
-    return defaultLanguage;
-  }
-
   const browserLanguages = window.navigator.languages.length
     ? window.navigator.languages
     : [window.navigator.language];
@@ -50,15 +47,41 @@ function getBrowserLanguage() {
   return defaultLanguage;
 }
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<LanguageCode>(() => {
-    if (typeof window === "undefined") {
-      return defaultLanguage;
-    }
+function getLanguageSnapshot(): LanguageCode {
+  if (typeof window === "undefined") {
+    return defaultLanguage;
+  }
 
-    const savedLanguage = window.localStorage.getItem(storageKey);
-    return isLanguageCode(savedLanguage) ? savedLanguage : getBrowserLanguage();
-  });
+  const savedLanguage = window.localStorage.getItem(storageKey);
+
+  return isLanguageCode(savedLanguage) ? savedLanguage : getBrowserLanguage();
+}
+
+function getServerLanguageSnapshot(): LanguageCode {
+  return defaultLanguage;
+}
+
+function subscribeToLanguageChanges(onStoreChange: () => void) {
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener(languageChangeEvent, onStoreChange);
+
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener(languageChangeEvent, onStoreChange);
+  };
+}
+
+export function LanguageProvider({ children }: { children: ReactNode }) {
+  const language = useSyncExternalStore(
+    subscribeToLanguageChanges,
+    getLanguageSnapshot,
+    getServerLanguageSnapshot,
+  );
+
+  function setLanguageState(nextLanguage: LanguageCode) {
+    window.localStorage.setItem(storageKey, nextLanguage);
+    window.dispatchEvent(new Event(languageChangeEvent));
+  }
 
   useEffect(() => {
     window.localStorage.setItem(storageKey, language);

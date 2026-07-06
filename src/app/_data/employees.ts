@@ -67,7 +67,19 @@ export type MonthSummary = {
 };
 
 function getLocale(language: LanguageCode) {
-  return language === "uk" ? "uk-UA" : language === "pl" ? "pl-PL" : "en-US";
+  if (language === "uk") {
+    return "uk-UA";
+  }
+
+  if (language === "pl") {
+    return "pl-PL";
+  }
+
+  if (language === "de") {
+    return "de-DE";
+  }
+
+  return "en-US";
 }
 
 export function createEmptyWorkLog(): WorkLog {
