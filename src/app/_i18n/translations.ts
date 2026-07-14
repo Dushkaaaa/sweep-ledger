@@ -146,7 +146,7 @@ export const dictionaries = {
       description:
         "Зручний кабінет для малого бізнесу та сервісних команд: години, ставки, аванси, закриття тижня та підсумки за місяць.",
       copyright: "© 2026 Trackora. Зроблено для реального щоденного обліку.",
-      version: "Готово для роботи та адаптації під ваш бізнес",
+      version: "Готово для роботи та адаптації під ваш бізнес v.1.0",
     },
     auth: {
       ownerSignIn: "Вхід до кабінету",
@@ -326,7 +326,7 @@ export const dictionaries = {
       description:
         "A practical workspace for small businesses and service teams: hours, rates, advances, week closing, and monthly summaries.",
       copyright: "Copyright 2026 Trackora. Built for everyday team operations.",
-      version: "Ready to run and adapt to your business",
+      version: "Ready to run and adapt to your business v.1.0",
     },
     auth: {
       ownerSignIn: "Workspace sign in",
@@ -506,7 +506,7 @@ export const dictionaries = {
       description:
         "Ein praktischer Arbeitsbereich für kleine Unternehmen und Serviceteams: Stunden, Sätze, Vorschüsse, Wochenabschluss und Monatsübersichten.",
       copyright: "© 2026 Trackora. Entwickelt für echte tägliche Verwaltung.",
-      version: "Bereit für den Einsatz und anpassbar an dein Geschäft",
+      version: "Bereit für den Einsatz und anpassbar an dein Geschäft v.1.0",
     },
     auth: {
       ownerSignIn: "Anmeldung im Arbeitsbereich",
@@ -686,7 +686,7 @@ export const dictionaries = {
       description:
         "Praktyczna przestrzeń dla małych firm i zespołów usługowych: godziny, stawki, zaliczki, zamknięcie tygodnia i podsumowania miesiąca.",
       copyright: "© 2026 Trackora. Stworzone do realnej codziennej ewidencji.",
-      version: "Gotowe do pracy i dopasowania do Twojej firmy",
+      version: "Gotowe do pracy i dopasowania do Twojej firmy v.1.0",
     },
     auth: {
       ownerSignIn: "Logowanie do panelu",

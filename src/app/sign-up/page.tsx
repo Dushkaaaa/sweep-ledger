@@ -157,6 +157,7 @@ export default function SignUpPage() {
               <input
                 type="text"
                 value={fullName}
+                required
                 onChange={(event) => setFullName(event.target.value)}
                 placeholder={t.auth.fullNamePlaceholder}
                 className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
@@ -170,6 +171,7 @@ export default function SignUpPage() {
               <input
                 type="text"
                 value={companyName}
+                required
                 onChange={(event) => setCompanyName(event.target.value)}
                 placeholder={t.auth.companyPlaceholder}
                 className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
@@ -184,6 +186,7 @@ export default function SignUpPage() {
                 <input
                   type="email"
                   value={email}
+                  required
                   onChange={(event) => setEmail(event.target.value)}
                   placeholder="team@company.com"
                   className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
@@ -197,6 +200,7 @@ export default function SignUpPage() {
                 <input
                   type="tel"
                   value={phone}
+                  required
                   onChange={(event) => setPhone(event.target.value)}
                   placeholder="+48 000 000 000"
                   className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"

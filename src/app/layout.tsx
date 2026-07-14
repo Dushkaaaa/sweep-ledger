@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { LanguageProvider } from "./_i18n/language-provider";
+import { ConsentProvider } from "./providers/consent-provider";
+import { AnalyticsWrapper } from "./analytics/analytics-wrapper";
+import { CookieBanner } from "./_components/cookie-baner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -10,7 +13,8 @@ const geistSans = Geist({
 
 export const metadata: Metadata = {
   title: "Trackora",
-  description: "Team hours, payouts, advances, and weekly reporting for service businesses",
+  description:
+    "Team hours, payouts, advances, and weekly reporting for service businesses",
 };
 
 export default function RootLayout({
@@ -21,7 +25,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} h-full`}>
       <body className="min-h-full">
-        <LanguageProvider>{children}</LanguageProvider>
+        <ConsentProvider>
+          <LanguageProvider>
+            {children}
+            <CookieBanner />
+            <AnalyticsWrapper />
+          </LanguageProvider>
+        </ConsentProvider>
       </body>
     </html>
   );

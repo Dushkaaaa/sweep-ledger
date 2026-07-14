@@ -2,8 +2,19 @@
 
 import Link from "next/link";
 import { useLanguage } from "../_i18n/language-provider";
+import { useConsent } from "../providers/consent-provider";
 
 const hrefs = ["/", "/sign-in", "/sign-up", "/", "/"];
+
+export function CookieSettings() {
+  const { resetCookies } = useConsent();
+
+  return (
+    <button onClick={resetCookies} className="text-sm underline cursor-pointer">
+      Cookie Settings
+    </button>
+  );
+}
 
 export function SiteFooter() {
   const { t } = useLanguage();
@@ -30,7 +41,10 @@ export function SiteFooter() {
           <ul className="mt-4 space-y-3 text-sm text-slate-600">
             {t.footer.navigation.map((label, index) => (
               <li key={label}>
-                <Link href={hrefs[index]} className="transition hover:text-sky-700">
+                <Link
+                  href={hrefs[index]}
+                  className="transition hover:text-sky-700"
+                >
                   {label}
                 </Link>
               </li>
@@ -52,8 +66,34 @@ export function SiteFooter() {
 
       <div className="border-t border-slate-200/80">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <p>{t.footer.copyright}</p>
-          <p>{t.footer.version}</p>
+          <div className="flex flex-wrap gap-4 flex-col">
+            <p>{t.footer.copyright}</p>
+
+            <div className="flex flex-col gap-4">
+              <Link
+                href="/privacy-policy"
+                className="transition hover:text-sky-700"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/cookie-policy"
+                className="transition hover:text-sky-700"
+              >
+                Cookie Policy
+              </Link>
+              <Link
+                href="/terms-of-service"
+                className="transition hover:text-sky-700"
+              >
+                Terms of Service
+              </Link>
+            </div>
+          </div>
+          <div className="flex flex-col items-start gap-4">
+            <p>{t.footer.version}</p>
+            <CookieSettings />
+          </div>
         </div>
       </div>
     </footer>
