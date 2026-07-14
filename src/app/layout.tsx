@@ -4,6 +4,7 @@ import { LanguageProvider } from "./_i18n/language-provider";
 import { ConsentProvider } from "./providers/consent-provider";
 import { AnalyticsWrapper } from "./analytics/analytics-wrapper";
 import { CookieBanner } from "./_components/cookie-baner";
+import { Analytics } from "@vercel/analytics/next"
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body className="min-h-full">
         <ConsentProvider>
           <LanguageProvider>
+            <Analytics />
             {children}
             <CookieBanner />
             <AnalyticsWrapper />
