@@ -134,6 +134,7 @@ function WorkspaceActivePanel({
   onCloseWeek: () => void;
   onCreateClientOrder: Workspace["actions"]["createClientOrder"];
   onCreateEmployee: () => void;
+  onDeleteClientOrder: Workspace["actions"]["deleteClientOrder"];
   onDownloadMonthlyReport: () => void;
   onNavigate: (section: CabinetSection) => void;
   onSaveLogo: Workspace["actions"]["saveCompanyLogo"];
