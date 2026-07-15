@@ -1,6 +1,8 @@
 import {
   type Advance,
+  type ClientOrder,
   type Employee,
+  type NewClientOrderInput,
   type NewEmployeeInput,
   type WorkDayKey,
   createEmptyWorkLog,
@@ -42,6 +44,32 @@ type EmployeeAdvanceRow = {
   day_key: WorkDayKey;
   amount: number;
   created_at: string;
+};
+
+type ClientOrderRow = {
+  id: string;
+  owner_id: string;
+  order_date: string;
+  first_name: string;
+  last_name: string;
+  street: string | null;
+  notes: string;
+  assigned_employee_id: string | null;
+  is_completed: boolean;
+  is_transferred: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+type ClientOrderUpdate = {
+  order_date?: string;
+  first_name?: string;
+  last_name?: string;
+  street?: string | null;
+  notes?: string;
+  assigned_employee_id?: string | null;
+  is_completed?: boolean;
+  is_transferred?: boolean;
 };
 
 function toIsoDate(date: Date) {
@@ -87,6 +115,20 @@ function mapAdvanceRow(advance: EmployeeAdvanceRow): Advance {
     id: advance.id,
     day: advance.day_key,
     amount: Number(advance.amount),
+  };
+}
+
+function mapClientOrderRow(row: ClientOrderRow): ClientOrder {
+  return {
+    id: row.id,
+    orderDate: row.order_date ?? "",
+    firstName: row.first_name ?? "",
+    lastName: row.last_name ?? "",
+    street: row.street ?? "",
+    notes: row.notes ?? "",
+    assignedEmployeeId: row.assigned_employee_id ?? null,
+    isCompleted: Boolean(row.is_completed),
+    isTransferred: Boolean(row.is_transferred),
   };
 }
 
@@ -149,12 +191,16 @@ function buildEmployee(
   };
 }
 
-async function ensureOpenWeeks(employeeRows: EmployeeRow[], weeks: EmployeeWeekRow[]) {
+async function ensureOpenWeeks(
+  employeeRows: EmployeeRow[],
+  weeks: EmployeeWeekRow[],
+) {
   const employeeIdsWithoutOpenWeek = employeeRows
     .filter(
       (employee) =>
         !weeks.some(
-          (week) => week.employee_id === employee.id && week.is_closed === false,
+          (week) =>
+            week.employee_id === employee.id && week.is_closed === false,
         ),
     )
     .map((employee) => employee.id);
@@ -171,6 +217,74 @@ async function ensureOpenWeeks(employeeRows: EmployeeRow[], weeks: EmployeeWeekR
       week_start_date: weekStartDate,
     })),
   );
+
+  if (error) {
+    throw error;
+  }
+}
+
+export async function fetchClientOrdersForOwner(ownerId: string) {
+  const { data, error } = await supabase
+    .from("client_orders")
+    .select("*")
+    .eq("owner_id", ownerId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw error;
+  }
+
+  return (data ?? []).map((row) => mapClientOrderRow(row as ClientOrderRow));
+}
+
+export async function createClientOrderForOwner(
+  ownerId: string,
+  input: NewClientOrderInput,
+) {
+  const { data, error } = await supabase
+    .from("client_orders")
+    .insert({
+      owner_id: ownerId,
+      order_date: input.orderDate,
+      first_name: input.firstName.trim(),
+      last_name: input.lastName.trim(),
+      street: input.street.trim() || null,
+      notes: input.notes.trim(),
+      assigned_employee_id: input.assignedEmployeeId || null,
+    })
+    .select("*")
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return mapClientOrderRow(data as ClientOrderRow);
+}
+
+export async function updateClientOrderById(
+  orderId: string,
+  updates: ClientOrderUpdate,
+) {
+  const { data, error } = await supabase
+    .from("client_orders")
+    .update(updates)
+    .eq("id", orderId)
+    .select("*")
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return mapClientOrderRow(data as ClientOrderRow);
+}
+
+export async function deleteClientOrderById(orderId: string) {
+  const { error } = await supabase
+    .from("client_orders")
+    .delete()
+    .eq("id", orderId);
 
   if (error) {
     throw error;
@@ -333,7 +447,10 @@ export async function removeEmployeeAdvance(advanceId: string) {
 }
 
 export async function deleteEmployeeById(employeeId: string) {
-  const { error } = await supabase.from("employees").delete().eq("id", employeeId);
+  const { error } = await supabase
+    .from("employees")
+    .delete()
+    .eq("id", employeeId);
 
   if (error) {
     throw error;

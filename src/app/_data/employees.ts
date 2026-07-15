@@ -57,6 +57,27 @@ export type NewEmployeeInput = {
   hourlyRate: number;
 };
 
+export type NewClientOrderInput = {
+  orderDate: string;
+  firstName: string;
+  lastName: string;
+  street: string;
+  notes: string;
+  assignedEmployeeId: string;
+};
+
+export type ClientOrder = {
+  id: string;
+  orderDate: string;
+  firstName: string;
+  lastName: string;
+  street: string;
+  notes: string;
+  assignedEmployeeId: string | null;
+  isCompleted: boolean;
+  isTransferred: boolean;
+};
+
 export type MonthSummary = {
   monthKey: string;
   monthLabel: string;
@@ -128,14 +149,19 @@ export function getTotalAdvances(advances: Advance[]) {
   return advances.reduce((total, advance) => total + advance.amount, 0);
 }
 
-export function getGrossPay(employee: Pick<Employee, "workLog" | "hourlyRate">) {
+export function getGrossPay(
+  employee: Pick<Employee, "workLog" | "hourlyRate">,
+) {
   return getTotalHours(employee.workLog) * employee.hourlyRate;
 }
 
 export function getPendingPay(
   employee: Pick<Employee, "workLog" | "hourlyRate" | "advances">,
 ) {
-  return Math.max(0, getGrossPay(employee) - getTotalAdvances(employee.advances));
+  return Math.max(
+    0,
+    getGrossPay(employee) - getTotalAdvances(employee.advances),
+  );
 }
 
 export function getWorkDayLabel(
@@ -204,6 +230,7 @@ export function getCurrentMonthSummary(
 
 export function hasCurrentWeekActivity(employee: Employee) {
   return (
-    getTotalHours(employee.workLog) > 0 || getTotalAdvances(employee.advances) > 0
+    getTotalHours(employee.workLog) > 0 ||
+    getTotalAdvances(employee.advances) > 0
   );
 }

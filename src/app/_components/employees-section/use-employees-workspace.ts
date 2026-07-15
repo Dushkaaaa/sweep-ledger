@@ -5,11 +5,27 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 
 import {
+  type ClientOrder,
   type Employee,
+  type NewClientOrderInput,
   type NewEmployeeInput,
   type WorkDayKey,
   hasCurrentWeekActivity,
 } from "../../_data/employees";
+
+function normalizeClientOrder(order: Partial<ClientOrder>): ClientOrder {
+  return {
+    id: order.id ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    orderDate: order.orderDate ?? "",
+    firstName: order.firstName ?? "",
+    lastName: order.lastName ?? "",
+    street: order.street ?? "",
+    notes: order.notes ?? "",
+    assignedEmployeeId: order.assignedEmployeeId ?? null,
+    isCompleted: Boolean(order.isCompleted),
+    isTransferred: Boolean(order.isTransferred),
+  };
+}
 import { useLanguage } from "../../_i18n/language-provider";
 import { supabase } from "@/lib/supabase/client";
 import {
@@ -20,12 +36,16 @@ import {
 import {
   addEmployeeAdvance,
   closeEmployeeWeek,
+  createClientOrderForOwner,
   createEmployeeForOwner,
+  deleteClientOrderById,
   deleteEmployeeById,
+  fetchClientOrdersForOwner,
   fetchEmployeesForOwner,
   getErrorMessage,
   removeEmployeeAdvance,
   signOutOwner,
+  updateClientOrderById,
   updateEmployeeDayHours,
 } from "@/lib/supabase/tracker";
 import { downloadMonthlyReportPdf } from "../monthly-report-pdf";
@@ -51,6 +71,7 @@ export function useEmployeesWorkspace() {
     null,
   );
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const [clientOrders, setClientOrders] = useState<ClientOrder[]>([]);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(
     null,
   );
@@ -61,6 +82,7 @@ export function useEmployeesWorkspace() {
 
   const selectedEmployee =
     employees.find((employee) => employee.id === selectedEmployeeId) ?? null;
+
   const summaryStats = useMemo(
     () => getWorkspaceSummary(employees, language),
     [employees, language],
@@ -72,9 +94,10 @@ export function useEmployeesWorkspace() {
       activeSession: Session | null,
       fallbackCompanyName = trackerName,
     ) => {
-      const [profile, employeeList] = await Promise.all([
+      const [profile, employeeList, orderList] = await Promise.all([
         fetchProfile(ownerId),
         fetchEmployeesForOwner(ownerId),
+        fetchClientOrdersForOwner(ownerId),
       ]);
 
       setCompanyName(
@@ -94,14 +117,18 @@ export function useEmployeesWorkspace() {
 
       setCompanyLogoDataUrl(profile?.logo_data_url ?? null);
       setEmployees(employeeList);
+      setClientOrders(orderList.map((order) => normalizeClientOrder(order)));
     },
     [setLanguage],
   );
 
-  const reloadWorkspace = useCallback(async (ownerId: string) => {
-    setErrorMessage("");
-    await loadWorkspace(ownerId, session, trackerName);
-  }, [loadWorkspace, session]);
+  const reloadWorkspace = useCallback(
+    async (ownerId: string) => {
+      setErrorMessage("");
+      await loadWorkspace(ownerId, session, trackerName);
+    },
+    [loadWorkspace, session],
+  );
 
   useEffect(() => {
     let active = true;
@@ -119,6 +146,7 @@ export function useEmployeesWorkspace() {
 
       if (!currentSession?.user) {
         setEmployees([]);
+        setClientOrders([]);
         setCompanyName(trackerName);
         setCompanyLogoDataUrl(null);
         setIsLoading(false);
@@ -149,6 +177,7 @@ export function useEmployeesWorkspace() {
 
       if (!nextSession?.user) {
         setEmployees([]);
+        setClientOrders([]);
         setSelectedEmployeeId(null);
         setCompanyName(trackerName);
         setCompanyLogoDataUrl(null);
@@ -207,6 +236,98 @@ export function useEmployeesWorkspace() {
     try {
       await createEmployeeForOwner(session.user.id, employee);
       await reloadWorkspace(session.user.id);
+    } catch (error) {
+      setErrorMessage(getErrorMessage(error));
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function handleCreateClientOrder(order: NewClientOrderInput) {
+    if (!session?.user) {
+      return;
+    }
+
+    setIsSaving(true);
+    setErrorMessage("");
+
+    try {
+      const createdOrder = await createClientOrderForOwner(
+        session.user.id,
+        order,
+      );
+
+      setClientOrders((current) => [createdOrder, ...current]);
+    } catch (error) {
+      setErrorMessage(getErrorMessage(error));
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function handleToggleClientOrderCompletion(orderId: string) {
+    const currentOrder = clientOrders.find((order) => order.id === orderId);
+
+    if (!currentOrder) {
+      return;
+    }
+
+    setIsSaving(true);
+    setErrorMessage("");
+
+    try {
+      const updatedOrder = await updateClientOrderById(orderId, {
+        is_completed: !currentOrder.isCompleted,
+      });
+
+      setClientOrders((current) =>
+        current.map((order) =>
+          order.id === orderId ? normalizeClientOrder(updatedOrder) : order,
+        ),
+      );
+    } catch (error) {
+      setErrorMessage(getErrorMessage(error));
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function handleToggleClientOrderTransfer(orderId: string) {
+    const currentOrder = clientOrders.find((order) => order.id === orderId);
+
+    if (!currentOrder) {
+      return;
+    }
+
+    setIsSaving(true);
+    setErrorMessage("");
+
+    try {
+      const updatedOrder = await updateClientOrderById(orderId, {
+        is_transferred: !currentOrder.isTransferred,
+      });
+
+      setClientOrders((current) =>
+        current.map((order) =>
+          order.id === orderId ? normalizeClientOrder(updatedOrder) : order,
+        ),
+      );
+    } catch (error) {
+      setErrorMessage(getErrorMessage(error));
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function handleDeleteClientOrder(orderId: string) {
+    setIsSaving(true);
+    setErrorMessage("");
+
+    try {
+      await deleteClientOrderById(orderId);
+      setClientOrders((current) =>
+        current.filter((order) => order.id !== orderId),
+      );
     } catch (error) {
       setErrorMessage(getErrorMessage(error));
     } finally {
@@ -386,6 +507,7 @@ export function useEmployeesWorkspace() {
 
   return {
     activeSection,
+    clientOrders,
     companyLogoDataUrl,
     companyName,
     copy,
@@ -403,7 +525,9 @@ export function useEmployeesWorkspace() {
       addAdvance: handleAddAdvance,
       changePassword: handleChangePassword,
       closeWeek: handleCloseWeek,
+      createClientOrder: handleCreateClientOrder,
       createEmployee: handleCreateEmployee,
+      deleteClientOrder: handleDeleteClientOrder,
       deleteEmployee: handleDeleteEmployee,
       downloadMonthlyReport: handleDownloadMonthlyReport,
       removeAdvance: handleRemoveAdvance,
@@ -412,6 +536,8 @@ export function useEmployeesWorkspace() {
       setActiveSection,
       setIsCreatingEmployee,
       signOut: handleSignOut,
+      toggleClientOrderCompletion: handleToggleClientOrderCompletion,
+      toggleClientOrderTransfer: handleToggleClientOrderTransfer,
       updateDayHours: handleDayHoursChange,
     },
   };

@@ -4,7 +4,12 @@ import { EmployeesHero } from "../employees-hero";
 import type { CabinetCopy, CabinetSection } from "../employees-section-copy";
 import { NewEmployeeModal } from "../new-employee-modal";
 import { SettingsPanel } from "../settings-panel";
-import { CabinetMenu, EmployeesPanel, ReportPanel } from "../workspace-panels";
+import {
+  CabinetMenu,
+  ClientsPanel,
+  EmployeesPanel,
+  ReportPanel,
+} from "../workspace-panels";
 import type { useEmployeesWorkspace } from "./use-employees-workspace";
 
 type Workspace = ReturnType<typeof useEmployeesWorkspace>;
@@ -16,6 +21,7 @@ type WorkspaceContentProps = {
 export function WorkspaceContent({ workspace }: WorkspaceContentProps) {
   const {
     activeSection,
+    clientOrders,
     companyLogoDataUrl,
     companyName,
     copy,
@@ -45,6 +51,7 @@ export function WorkspaceContent({ workspace }: WorkspaceContentProps) {
 
         <WorkspaceActivePanel
           activeSection={activeSection}
+          clientOrders={clientOrders}
           copy={copy}
           employees={employees}
           errorMessage={errorMessage}
@@ -56,8 +63,12 @@ export function WorkspaceContent({ workspace }: WorkspaceContentProps) {
           onBack={() => actions.setActiveSection("home")}
           onChangePassword={actions.changePassword}
           onCloseWeek={actions.closeWeek}
+          onCreateClientOrder={actions.createClientOrder}
           onCreateEmployee={() => actions.setIsCreatingEmployee(true)}
+          onDeleteClientOrder={actions.deleteClientOrder}
           onDownloadMonthlyReport={actions.downloadMonthlyReport}
+          onToggleClientOrderCompletion={actions.toggleClientOrderCompletion}
+          onToggleClientOrderTransfer={actions.toggleClientOrderTransfer}
           onNavigate={actions.setActiveSection}
           onSaveLogo={actions.saveCompanyLogo}
           onSelectEmployee={actions.selectEmployee}
@@ -85,6 +96,7 @@ export function WorkspaceContent({ workspace }: WorkspaceContentProps) {
 
 function WorkspaceActivePanel({
   activeSection,
+  clientOrders,
   copy,
   employees,
   errorMessage,
@@ -96,14 +108,19 @@ function WorkspaceActivePanel({
   onBack,
   onChangePassword,
   onCloseWeek,
+  onCreateClientOrder,
   onCreateEmployee,
+  onDeleteClientOrder,
   onDownloadMonthlyReport,
+  onToggleClientOrderCompletion,
+  onToggleClientOrderTransfer,
   onNavigate,
   onSaveLogo,
   onSelectEmployee,
   onSignOut,
 }: {
   activeSection: CabinetSection;
+  clientOrders: Workspace["clientOrders"];
   copy: CabinetCopy;
   employees: Workspace["employees"];
   errorMessage: string;
@@ -115,6 +132,7 @@ function WorkspaceActivePanel({
   onBack: () => void;
   onChangePassword: Workspace["actions"]["changePassword"];
   onCloseWeek: () => void;
+  onCreateClientOrder: Workspace["actions"]["createClientOrder"];
   onCreateEmployee: () => void;
   onDownloadMonthlyReport: () => void;
   onNavigate: (section: CabinetSection) => void;
@@ -150,6 +168,22 @@ function WorkspaceActivePanel({
     );
   }
 
+  if (activeSection === "clients") {
+    return (
+      <ClientsPanel
+        copy={copy}
+        employees={employees}
+        orders={clientOrders}
+        isSaving={isSaving}
+        onBack={onBack}
+        onCreateOrder={onCreateClientOrder}
+        onDeleteOrder={onDeleteClientOrder}
+        onToggleCompleted={onToggleClientOrderCompletion}
+        onToggleTransferred={onToggleClientOrderTransfer}
+      />
+    );
+  }
+
   if (activeSection === "weekly-report") {
     return (
       <ReportPanel
@@ -158,8 +192,14 @@ function WorkspaceActivePanel({
         copy={copy}
         stats={[
           [copy.employeesCount, String(stats.employeesCount)],
-          [copy.activeWeekHours, `${stats.currentWeekHours} ${t.common.hoursShort}`],
-          [copy.pendingWeekPay, `${stats.currentWeekPending} ${t.common.currency}`],
+          [
+            copy.activeWeekHours,
+            `${stats.currentWeekHours} ${t.common.hoursShort}`,
+          ],
+          [
+            copy.pendingWeekPay,
+            `${stats.currentWeekPending} ${t.common.currency}`,
+          ],
         ]}
         onBack={onBack}
       />
@@ -174,8 +214,14 @@ function WorkspaceActivePanel({
         copy={copy}
         stats={[
           [copy.employeesCount, String(stats.employeesCount)],
-          [copy.activeMonthHours, `${stats.currentMonthHours} ${t.common.hoursShort}`],
-          [copy.pendingMonthPay, `${stats.currentMonthPending} ${t.common.currency}`],
+          [
+            copy.activeMonthHours,
+            `${stats.currentMonthHours} ${t.common.hoursShort}`,
+          ],
+          [
+            copy.pendingMonthPay,
+            `${stats.currentMonthPending} ${t.common.currency}`,
+          ],
         ]}
         actionLabel={copy.downloadMonthlyPdf}
         onAction={onDownloadMonthlyReport}

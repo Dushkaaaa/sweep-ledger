@@ -18,24 +18,29 @@ interface ConsentContextType {
 const ConsentContext = createContext<ConsentContextType | undefined>(undefined);
 
 export function ConsentProvider({ children }: { children: React.ReactNode }) {
-  const [consent, setConsent] = useState<Consent>(null);
-  const [analyticsConsent, setAnalyticsConsent] = useState(false);
+  const [consent, setConsent] = useState<Consent>(() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    const saved = window.localStorage.getItem("cookie-consent") as Consent;
+
+    return saved === "accepted" || saved === "rejected" || saved === "custom"
+      ? saved
+      : null;
+  });
+  const [analyticsConsent, setAnalyticsConsent] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    const savedAnalytics = window.localStorage.getItem("cookie-analytics");
+
+    return savedAnalytics === "true";
+  });
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("cookie-consent") as Consent;
-
-    if (saved === "accepted" || saved === "rejected" || saved === "custom") {
-      setConsent(saved);
-    }
-
-    const savedAnalytics = localStorage.getItem("cookie-analytics");
-    if (savedAnalytics === "true") {
-      setAnalyticsConsent(true);
-    } else if (savedAnalytics === "false") {
-      setAnalyticsConsent(false);
-    }
-
     setMounted(true);
   }, []);
 

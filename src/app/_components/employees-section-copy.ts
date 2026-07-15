@@ -5,6 +5,7 @@ export const trackerName = "Trackora";
 export type CabinetSection =
   | "home"
   | "employees"
+  | "clients"
   | "weekly-report"
   | "monthly-report"
   | "settings";
@@ -18,6 +19,7 @@ export const cabinetCopy = {
     menu: {
       home: "Головна",
       employees: "Працівники",
+      clients: "Контрагенти",
       weeklyReport: "Звіт за тиждень",
       monthlyReport: "Звіт за місяць",
       settings: "Налаштування",
@@ -26,6 +28,7 @@ export const cabinetCopy = {
     hints: {
       home: "Огляд кабінету",
       employees: "Список і картки команди",
+      clients: "Замовлення й клієнти",
       weeklyReport: "Години та виплати за тиждень",
       monthlyReport: "Зведення за поточний місяць",
       settings: "Мова та параметри кабінету",
@@ -34,6 +37,28 @@ export const cabinetCopy = {
     weeklyTitle: "Звіт за тиждень",
     monthlyTitle: "Звіт за місяць",
     settingsTitle: "Налаштування",
+    clientsTitle: "Контрагенти та замовлення",
+    clientsDescription:
+      "Додавай замовлення клієнтів, зазначай дату, ім'я та прізвище, додаткові примітки й відповідального працівника.",
+    clientsEmptyTitle: "Поки немає замовлень",
+    clientsEmptyDescription: "Додай перше замовлення через форму справа.",
+    orderDate: "Дата замовлення",
+    firstName: "Ім'я",
+    lastName: "Прізвище",
+    street: "Вулиця",
+    additionalNotes: "Додаткові примітки",
+    assignedEmployee: "Виконавець",
+    selectEmployee: "Оберіть працівника",
+    completed: "Виконано",
+    transferred: "Перенесено",
+    markCompleted: "Виконано",
+    markTransferred: "Перенести",
+    deleteOrder: "Видалити",
+    saveClientOrder: "Додати замовлення",
+    clientListTitle: "Список замовлень",
+    clientListSubtitle: "Останні замовлення відображаються тут.",
+    clientName: "Клієнт",
+    noNotes: "Без додаткових приміток",
     weeklyDescription:
       "Коротке зведення по відкритому тижню. Детальні звіти можна розширити пізніше окремими таблицями.",
     monthlyDescription:
@@ -55,6 +80,7 @@ export const cabinetCopy = {
     menu: {
       home: "Home",
       employees: "Employees",
+      clients: "Clients",
       weeklyReport: "Weekly report",
       monthlyReport: "Monthly report",
       settings: "Settings",
@@ -63,6 +89,7 @@ export const cabinetCopy = {
     hints: {
       home: "Workspace overview",
       employees: "Team list and employee cards",
+      clients: "Orders and client records",
       weeklyReport: "Weekly hours and payouts",
       monthlyReport: "Current month summary",
       settings: "Language and workspace options",
@@ -71,6 +98,28 @@ export const cabinetCopy = {
     weeklyTitle: "Weekly report",
     monthlyTitle: "Monthly report",
     settingsTitle: "Settings",
+    clientsTitle: "Clients and orders",
+    clientsDescription:
+      "Add client orders, note the order date, full name, any extra details, and the staff member who is assigned.",
+    clientsEmptyTitle: "No orders yet",
+    clientsEmptyDescription: "Add your first order from the form on the right.",
+    orderDate: "Order date",
+    firstName: "First name",
+    lastName: "Last name",
+    street: "Street",
+    additionalNotes: "Additional notes",
+    assignedEmployee: "Assigned employee",
+    selectEmployee: "Select employee",
+    completed: "Completed",
+    transferred: "Transferred",
+    markCompleted: "Done",
+    markTransferred: "Transfer",
+    deleteOrder: "Delete",
+    saveClientOrder: "Add order",
+    clientListTitle: "Orders list",
+    clientListSubtitle: "Recent orders will appear here.",
+    clientName: "Client",
+    noNotes: "No additional notes",
     weeklyDescription:
       "A quick summary of the open week. Detailed report tables can be expanded later.",
     monthlyDescription:
@@ -92,6 +141,7 @@ export const cabinetCopy = {
     menu: {
       home: "Start",
       employees: "Mitarbeiter",
+      clients: "Kunden",
       weeklyReport: "Wochenbericht",
       monthlyReport: "Monatsbericht",
       settings: "Einstellungen",
@@ -100,6 +150,7 @@ export const cabinetCopy = {
     hints: {
       home: "Übersicht des Arbeitsbereichs",
       employees: "Teamliste und Mitarbeiterkarten",
+      clients: "Bestellungen und Kunden",
       weeklyReport: "Wochenstunden und Auszahlungen",
       monthlyReport: "Übersicht des aktuellen Monats",
       settings: "Sprache und Optionen",
@@ -108,6 +159,29 @@ export const cabinetCopy = {
     weeklyTitle: "Wochenbericht",
     monthlyTitle: "Monatsbericht",
     settingsTitle: "Einstellungen",
+    clientsTitle: "Kunden und Aufträge",
+    clientsDescription:
+      "Füge Kundenaufträge hinzu, trage Datum, Vor- und Nachname, zusätzliche Hinweise und den zuständigen Mitarbeiter ein.",
+    clientsEmptyTitle: "Noch keine Aufträge",
+    clientsEmptyDescription:
+      "Füge deinen ersten Auftrag über das Formular rechts hinzu.",
+    orderDate: "Auftragsdatum",
+    firstName: "Vorname",
+    lastName: "Nachname",
+    street: "Straße",
+    additionalNotes: "Zusätzliche Hinweise",
+    assignedEmployee: "Zuständiger Mitarbeiter",
+    selectEmployee: "Mitarbeiter auswählen",
+    completed: "Erledigt",
+    transferred: "Übertragen",
+    markCompleted: "Erledigt",
+    markTransferred: "Übertragen",
+    deleteOrder: "Löschen",
+    saveClientOrder: "Auftrag hinzufügen",
+    clientListTitle: "Auftragsliste",
+    clientListSubtitle: "Neueste Aufträge werden hier angezeigt.",
+    clientName: "Kunde",
+    noNotes: "Keine zusätzlichen Hinweise",
     weeklyDescription:
       "Eine kurze Übersicht über die offene Woche. Detaillierte Berichtstabellen können später erweitert werden.",
     monthlyDescription:
@@ -129,6 +203,7 @@ export const cabinetCopy = {
     menu: {
       home: "Główna",
       employees: "Pracownicy",
+      clients: "Kontrahenci",
       weeklyReport: "Raport tygodniowy",
       monthlyReport: "Raport miesięczny",
       settings: "Ustawienia",
@@ -137,6 +212,7 @@ export const cabinetCopy = {
     hints: {
       home: "Przegląd panelu",
       employees: "Lista i karty zespołu",
+      clients: "Zamówienia i klienci",
       weeklyReport: "Godziny i wypłaty za tydzień",
       monthlyReport: "Podsumowanie bieżącego miesiąca",
       settings: "Język i opcje panelu",
@@ -145,6 +221,29 @@ export const cabinetCopy = {
     weeklyTitle: "Raport tygodniowy",
     monthlyTitle: "Raport miesięczny",
     settingsTitle: "Ustawienia",
+    clientsTitle: "Kontrahenci i zamówienia",
+    clientsDescription:
+      "Dodawaj zamówienia klientów, podawaj datę, imię i nazwisko, dodatkowe uwagi oraz pracownika odpowiedzialnego.",
+    clientsEmptyTitle: "Brak zamówień",
+    clientsEmptyDescription:
+      "Dodaj pierwsze zamówienie z formularza po prawej stronie.",
+    orderDate: "Data zamówienia",
+    firstName: "Imię",
+    lastName: "Nazwisko",
+    street: "Ulica",
+    additionalNotes: "Dodatkowe uwagi",
+    assignedEmployee: "Wykonawca",
+    selectEmployee: "Wybierz pracownika",
+    completed: "Wykonane",
+    transferred: "Przeniesione",
+    markCompleted: "Wykonano",
+    markTransferred: "Przenieś",
+    deleteOrder: "Usuń",
+    saveClientOrder: "Dodaj zamówienie",
+    clientListTitle: "Lista zamówień",
+    clientListSubtitle: "Najnowsze zamówienia będą widoczne tutaj.",
+    clientName: "Klient",
+    noNotes: "Brak dodatkowych uwag",
     weeklyDescription:
       "Krótkie podsumowanie otwartego tygodnia. Szczegółowe tabele raportów można rozbudować później.",
     monthlyDescription:
