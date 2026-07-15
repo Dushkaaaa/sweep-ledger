@@ -140,6 +140,8 @@ function WorkspaceActivePanel({
   onSaveLogo: Workspace["actions"]["saveCompanyLogo"];
   onSelectEmployee: (employeeId: string) => void;
   onSignOut: () => void;
+  onToggleClientOrderCompletion: Workspace["actions"]["toggleClientOrderCompletion"];
+  onToggleClientOrderTransfer: Workspace["actions"]["toggleClientOrderTransfer"];
 }) {
   if (activeSection === "home") {
     return (
