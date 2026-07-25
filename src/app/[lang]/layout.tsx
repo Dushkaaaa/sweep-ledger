@@ -22,29 +22,29 @@ export async function generateMetadata({
 
   const metadataByLang = {
     uk: {
-      title: "Trackora — CRM для клінінгових компаній",
-      description:
-        "Trackora допомагає керувати працівниками, годинами, оплатами, авансами та звітами для клінінгових компаній.",
-      locale: "uk_UA",
-    },
-    en: {
-      title: "Trackora — CRM for cleaning companies",
-      description:
-        "Trackora helps cleaning businesses manage employees, hours, payouts, advances, and reports.",
-      locale: "en_US",
-    },
-    pl: {
-      title: "Trackora — CRM dla firm sprzątania",
-      description:
-        "Trackora pomaga zarządzać pracownikami, godzinami, wypłatami, zaliczkami i raportami dla firm sprzątania.",
-      locale: "pl_PL",
-    },
-    de: {
-    title: "Trackora — CRM für Reinigungsunternehmen",
+    title: "Trackora — Управління персоналом та робочим часом",
     description:
-      "Trackora hilft Reinigungsunternehmen, Mitarbeiter, Arbeitsstunden, Auszahlungen, Vorschüsse und Berichte zu verwalten.",
+      "Trackora допомагає сервісним компаніям керувати працівниками, робочим часом, зарплатою, авансами, графіками та звітами в одній платформі.",
+    locale: "uk_UA",
+  },
+  en: {
+    title: "Trackora — Employee & Workforce Management Software",
+    description:
+      "Trackora helps service businesses manage employees, work hours, payroll, advances, schedules, and reports in one platform.",
+    locale: "en_US",
+  },
+  pl: {
+    title: "Trackora — Zarządzanie pracownikami i czasem pracy",
+    description:
+      "Trackora pomaga firmom usługowym zarządzać pracownikami, godzinami pracy, wypłatami, zaliczkami, grafikami i raportami w jednej platformie.",
+    locale: "pl_PL",
+  },
+  de: {
+    title: "Trackora — Mitarbeiter- und Arbeitszeitverwaltung",
+    description:
+      "Trackora hilft Dienstleistungsunternehmen, Mitarbeiter, Arbeitsstunden, Gehälter, Vorschüsse, Zeitpläne und Berichte in einer Plattform zu verwalten.",
     locale: "de_DE",
-    },
+  },
     alternates: {
   canonical: `/${lang}`,
   languages: {
