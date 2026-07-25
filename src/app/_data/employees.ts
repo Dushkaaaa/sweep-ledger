@@ -49,6 +49,8 @@ export type Employee = {
   workLog: WorkLog;
   advances: Advance[];
   weekHistory: WeekHistoryEntry[];
+  daysOff?: number;
+  sickLeave?: number;
 };
 
 export type NewEmployeeInput = {
@@ -121,6 +123,29 @@ export function getTotalHours(workLog: WorkLog) {
 
 export function getWorkedDaysCount(workLog: WorkLog) {
   return Object.values(workLog).filter((hours) => hours > 0).length;
+}
+
+export function getEmployeePerformanceMetrics(
+  employee: Pick<Employee, "workLog" | "daysOff" | "sickLeave">,
+) {
+  const totalHours = getTotalHours(employee.workLog);
+  const workedDays = getWorkedDaysCount(employee.workLog);
+  const sickLeave = employee.sickLeave ?? 0;
+  const availableDays = Math.max(0, 7 - sickLeave);
+  const daysOff = Math.max(
+    employee.daysOff ?? 0,
+    Math.max(0, availableDays - workedDays),
+  );
+  const averageHoursPerDay =
+    workedDays > 0 ? Number((totalHours / workedDays).toFixed(1)) : 0;
+
+  return {
+    totalHours,
+    workedDays,
+    daysOff,
+    sickLeave,
+    averageHoursPerDay,
+  };
 }
 
 export function getShiftSummary(

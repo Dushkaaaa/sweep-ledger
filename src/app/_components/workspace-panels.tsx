@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
 
-import type {
-  ClientOrder,
-  Employee,
-  NewClientOrderInput,
+import {
+  getEmployeePerformanceMetrics,
+  type ClientOrder,
+  type Employee,
+  type NewClientOrderInput,
 } from "../_data/employees";
 import type { Dictionary } from "../_i18n/translations";
 import { EmployeeCard } from "./employee-card";
@@ -59,6 +60,12 @@ export function CabinetMenu({
           hint={copy.hints.clients}
           icon="clients"
           onClick={() => onNavigate("clients")}
+        />
+        <MenuTile
+          title={copy.menu.statistics}
+          hint={copy.hints.statistics}
+          icon="stats"
+          onClick={() => onNavigate("statistics")}
         />
         <MenuTile
           title={copy.menu.weeklyReport}
@@ -548,6 +555,156 @@ export function ClientsPanel({
   );
 }
 
+export function StatisticsPanel({
+  copy,
+  employees,
+  onBack,
+}: {
+  copy: CabinetCopy;
+  employees: Employee[];
+  onBack: () => void;
+}) {
+  const rankedEmployees = useMemo(() => {
+    return [...employees].sort((left, right) => {
+      const leftMetrics = getEmployeePerformanceMetrics(left);
+      const rightMetrics = getEmployeePerformanceMetrics(right);
+
+      return rightMetrics.totalHours - leftMetrics.totalHours;
+    });
+  }, [employees]);
+
+  return (
+    <section className="rounded-4xl border border-slate-200/70 bg-white/90 p-4 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)] backdrop-blur sm:p-5">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <button
+          type="button"
+          onClick={onBack}
+          className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+        >
+          {copy.backToMenu}
+        </button>
+      </div>
+
+      <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+        {copy.statisticsTitle}
+      </h2>
+      <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
+        {copy.statisticsDescription}
+      </p>
+
+      <div className="mt-5 grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
+        <div className="space-y-3">
+          {rankedEmployees.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-5 text-center text-sm text-slate-500">
+              {copy.statisticsSummary}
+            </div>
+          ) : (
+            rankedEmployees.map((employee) => {
+              const metrics = getEmployeePerformanceMetrics(employee);
+              const isHighPerformer = metrics.totalHours >= 35;
+              const isNeedsAttention =
+                metrics.totalHours < 20 || metrics.sickLeave > 0;
+
+              return (
+                <div
+                  key={employee.id}
+                  className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                >
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <p className="text-base font-semibold text-slate-900">
+                        {employee.name}
+                      </p>
+                      <p className="mt-1 text-sm text-slate-500">
+                        {employee.role}
+                      </p>
+                    </div>
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${isHighPerformer ? "bg-emerald-100 text-emerald-700" : isNeedsAttention ? "bg-amber-100 text-amber-700" : "bg-sky-100 text-sky-700"}`}
+                    >
+                      {isHighPerformer
+                        ? copy.statisticsStatusTopPerformer
+                        : isNeedsAttention
+                          ? copy.statisticsStatusNeedsAttention
+                          : copy.statisticsStatusSteady}
+                    </span>
+                  </div>
+
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                    <div className="rounded-xl border border-slate-200 bg-white p-3">
+                      <p className="text-xs uppercase tracking-wide text-slate-500">
+                        {copy.statisticsMetricHours}
+                      </p>
+                      <p className="mt-2 text-lg font-semibold text-slate-900">
+                        {metrics.totalHours}
+                      </p>
+                    </div>
+                    <div className="rounded-xl border border-slate-200 bg-white p-3">
+                      <p className="text-xs uppercase tracking-wide text-slate-500">
+                        {copy.statisticsMetricWorkedDays}
+                      </p>
+                      <p className="mt-2 text-lg font-semibold text-slate-900">
+                        {metrics.workedDays}
+                      </p>
+                    </div>
+                    <div className="rounded-xl border border-slate-200 bg-white p-3">
+                      <p className="text-xs uppercase tracking-wide text-slate-500">
+                        {copy.statisticsMetricDaysOff}
+                      </p>
+                      <p className="mt-2 text-lg font-semibold text-slate-900">
+                        {metrics.daysOff}
+                      </p>
+                    </div>
+                    <div className="rounded-xl border border-slate-200 bg-white p-3">
+                      <p className="text-xs uppercase tracking-wide text-slate-500">
+                        {copy.statisticsMetricSickLeave}
+                      </p>
+                      <p className="mt-2 text-lg font-semibold text-slate-900">
+                        {metrics.sickLeave}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 text-sm text-slate-500">
+                    {copy.statisticsMetricAverage}: {metrics.averageHoursPerDay}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <p className="text-sm font-semibold text-slate-900">
+            {copy.statisticsSummary}
+          </p>
+          <div className="mt-4 space-y-3 text-sm text-slate-600">
+            <div className="rounded-xl border border-slate-200 bg-white p-3">
+              <p className="font-semibold text-slate-900">
+                {copy.statisticsSidebarTopPerformer}
+              </p>
+              <p className="mt-1">
+                {rankedEmployees[0]?.name ?? copy.statisticsSidebarNoData}
+              </p>
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-white p-3">
+              <p className="font-semibold text-slate-900">
+                {copy.statisticsSidebarNeedsAttention}
+              </p>
+              <p className="mt-1">
+                {rankedEmployees.find(
+                  (employee) =>
+                    getEmployeePerformanceMetrics(employee).totalHours < 20,
+                )?.name ?? copy.statisticsSidebarNoData}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function ReportPanel({
   title,
   description,
@@ -666,6 +823,7 @@ type MenuIconName =
   | "home"
   | "employees"
   | "clients"
+  | "stats"
   | "week"
   | "month"
   | "settings"
@@ -712,6 +870,17 @@ function MenuIcon({ name }: { name: MenuIconName }) {
         <path d="M4 18h6" />
         <circle cx="17" cy="16" r="3" />
         <path d="m19 14 1 1" />
+      </svg>
+    );
+  }
+
+  if (name === "stats") {
+    return (
+      <svg {...commonProps}>
+        <path d="M4 19h16" />
+        <path d="M7 15v-4" />
+        <path d="M12 15V8" />
+        <path d="M17 15v-7" />
       </svg>
     );
   }

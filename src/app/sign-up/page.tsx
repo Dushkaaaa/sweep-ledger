@@ -6,6 +6,7 @@ import { useState } from "react";
 import { LanguageSwitcher } from "../_components/language-switcher";
 import { SiteFooter } from "../_components/site-footer";
 import { useLanguage } from "../_i18n/language-provider";
+import { getWorkspaceRoute } from "../_i18n/route-utils";
 import { supabase } from "@/lib/supabase/client";
 import { ensureProfile } from "@/lib/supabase/profiles";
 
@@ -21,6 +22,7 @@ export default function SignUpPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -34,6 +36,11 @@ export default function SignUpPage() {
 
     if (password.length < 8) {
       setErrorMessage(t.auth.passwordTooShort);
+      return;
+    }
+
+    if (!agreedToTerms) {
+      setErrorMessage(t.auth.mustAgreeToTerms);
       return;
     }
 
@@ -61,7 +68,8 @@ export default function SignUpPage() {
     if (data.user && data.session) {
       try {
         await ensureProfile(data.user);
-        router.push("/");
+        const workspaceRoute = getWorkspaceRoute(data.user.id);
+        router.push(workspaceRoute);
         router.refresh();
       } catch (profileError) {
         const message =
@@ -87,7 +95,7 @@ export default function SignUpPage() {
           <div>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <Link
-                href="/"
+                href={`/${language}`}
                 className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white/90 transition hover:bg-white/15"
               >
                 {t.common.backToTracker}
@@ -242,7 +250,7 @@ export default function SignUpPage() {
               </div>
             ) : null}
 
-            {successMessage ? (
+            {/* {successMessage ? (
               <div className="rounded-3xl border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-700">
                 {successMessage}
               </div>
@@ -251,6 +259,46 @@ export default function SignUpPage() {
             <button
               type="submit"
               disabled={isSubmitting}
+              className="w-full rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+            >
+              {isSubmitting ? t.auth.creating : t.auth.createOwner}
+            </button> */}
+            {successMessage ? (
+              <div className="rounded-3xl border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-700">
+                {successMessage}
+              </div>
+            ) : null}
+
+            <label className="flex items-start gap-3 text-sm text-slate-600">
+              <input
+                type="checkbox"
+                checked={agreedToTerms}
+                onChange={(event) => setAgreedToTerms(event.target.checked)}
+                className="mt-1 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-400"
+              />
+              <span>
+                {t.auth.agreeToTermsPrefix}{" "}
+                <Link
+                  href={`/terms-of-service`}
+                  target="_blank"
+                  className="font-medium text-sky-700 hover:text-sky-800"
+                >
+                  {t.auth.termsOfService}
+                </Link>{" "}
+                {t.auth.agreeToTermsAnd}{" "}
+                <Link
+                  href={`/privacy-policy`}
+                  target="_blank"
+                  className="font-medium text-sky-700 hover:text-sky-800"
+                >
+                  {t.auth.privacyPolicy}
+                </Link>
+              </span>
+            </label>
+
+            <button
+              type="submit"
+              disabled={isSubmitting || !agreedToTerms}
               className="w-full rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
             >
               {isSubmitting ? t.auth.creating : t.auth.createOwner}

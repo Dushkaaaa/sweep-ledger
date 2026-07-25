@@ -80,6 +80,62 @@ export const dictionaries = {
       monthHours: "Годин за місяць",
       monthPending: "До виплати за місяць",
     },
+    landing: {
+      eyebrow: "CRM для сучасних компаній",
+      title:
+        "Управляйте командою, задачами та аналітикою працівників у одному місці.",
+      description:
+        "Trackora — це не просто інструмент для обліку. Це операційна система для компаній, яка допомагає контролювати виконання роботи, бачити навантаження співробітників і приймати рішення на основі даних.",
+      ctaPrimary: "Почати працювати",
+      ctaSecondary: "Дізнатися більше",
+      panelTitle: "Що дає продукт",
+      panelBenefit1Title: "Видимість роботи",
+      panelBenefit1Description:
+        "Жива картина виконання задач для всього колективу.",
+      panelBenefit2Title: "Аналітика в реальному часі",
+      panelBenefit2Description:
+        "Розумійте, де є збої, навантаження чи потенціал для росту.",
+      panelBenefit3Title: "Прозорість для керівництва",
+      panelBenefit3Description:
+        "Керівники бачать не тільки цифри, а й процеси.",
+      audienceEyebrow: "Для кого підходить",
+      audienceTitle:
+        "Підходить для компаній, де важливі люди, процеси і контроль.",
+      audienceDescription:
+        "Цей продукт підходить не лише для однієї ніші. Він добре працює там, де потрібен порядок у роботі команди, прозорість виконання та аналітика.",
+      industries: [
+        "Сервісні компанії",
+        "Агенції",
+        "Логістика",
+        "Будівельні команди",
+        "Компанії з виїзними бригадами",
+      ],
+      featureTeamTitle: "Управління командами",
+      featureTeamDescription:
+        "Централізуйте задачі, відповідальних, дедлайни та статуси роботи в одному місці.",
+      featureExecutionTitle: "Контроль виконання",
+      featureExecutionDescription:
+        "Відстежуйте, хто що зробив, які процеси затягуються і де потрібен втручальний крок.",
+      featureAnalyticsTitle: "Аналітика працівників",
+      featureAnalyticsDescription:
+        "Бачте продуктивність, навантаження, темпи роботи та слабкі місця по кожному співробітнику.",
+      featureReportsTitle: "Автоматичні звіти",
+      featureReportsDescription:
+        "Готуйте тижневі або місячні звіти без ручного збирання даних з десятка інструментів.",
+      whyWorkEyebrow: "Чому це працює",
+      whyWorkTitle: "Від простого контролю до стратегічної аналітики.",
+      whyWorkBenefits: [
+        "Один простір для роботи команди і операцій",
+        "Швидший контроль прогресу без хаосу в чатах",
+        "Зрозуміла аналітика для прийняття рішень",
+        "Масштабування без втрати якості управління",
+      ],
+      finalTitle: "Готові зробити управління компанією простішим і прозорішим?",
+      finalDescription:
+        "Trackora допомагає керувати командою, бачити результат роботи та зменшувати хаос у щоденних процесах.",
+      finalPrimaryCta: "Створити аккаунт",
+      finalSecondaryCta: "Зв'язатися з нами",
+    },
     card: {
       pending: "До виплати",
       currentWeek: "Поточний тиждень",
@@ -87,7 +143,8 @@ export const dictionaries = {
       advances: "Аванси",
       gross: "Нараховано",
       month: "За місяць",
-      details: "Натисни, щоб переглянути деталі, історію тижнів і підсумок за місяць",
+      details:
+        "Натисни, щоб переглянути деталі, історію тижнів і підсумок за місяць",
     },
     details: {
       eyebrow: "Деталі працівника",
@@ -136,7 +193,13 @@ export const dictionaries = {
     footer: {
       navigationTitle: "Навігація",
       productTitle: "Продукт",
-      navigation: ["Головна", "Вхід", "Реєстрація", "Працівники", "Місячний підсумок"],
+      navigation: [
+        "Головна",
+        "Вхід",
+        "Реєстрація",
+        "Працівники",
+        "Місячний підсумок",
+      ],
       notes: [
         "Облік годин і ставок",
         "Закриття тижня в один клік",
@@ -146,7 +209,7 @@ export const dictionaries = {
       description:
         "Зручний кабінет для малого бізнесу та сервісних команд: години, ставки, аванси, закриття тижня та підсумки за місяць.",
       copyright: "© 2026 Trackora. Зроблено для реального щоденного обліку.",
-      version: "Готово для роботи та адаптації під ваш бізнес v.1.0",
+      version: "Готово для роботи та адаптації під ваш бізнес BETA v.1.0",
     },
     auth: {
       ownerSignIn: "Вхід до кабінету",
@@ -205,6 +268,12 @@ export const dictionaries = {
       creating: "Створюємо акаунт...",
       createOwner: "Створити акаунт компанії",
       hasAccount: "Уже маєш акаунт?",
+      mustAgreeToTerms:
+        "Потрібно погодитись з умовами використання та політикою конфіденційності",
+      agreeToTermsPrefix: "Я погоджуюсь з",
+      termsOfService: "умовами використання",
+      agreeToTermsAnd: "та",
+      privacyPolicy: "політикою конфіденційності",
     },
   },
   en: {
@@ -264,6 +333,61 @@ export const dictionaries = {
       monthHours: "Hours this month",
       monthPending: "Pending this month",
     },
+    landing: {
+      eyebrow: "CRM for modern companies",
+      title: "Manage your team, tasks, and employee analytics in one place.",
+      description:
+        "Trackora is more than a tracking tool. It is an operating system for companies that need visibility into execution, employee workload, and data-driven decisions.",
+      ctaPrimary: "Get started",
+      ctaSecondary: "Learn more",
+      panelTitle: "What the product delivers",
+      panelBenefit1Title: "Work visibility",
+      panelBenefit1Description:
+        "A live picture of task execution across the whole team.",
+      panelBenefit2Title: "Real-time analytics",
+      panelBenefit2Description:
+        "See where bottlenecks, overloads, or growth opportunities appear.",
+      panelBenefit3Title: "Transparency for leadership",
+      panelBenefit3Description:
+        "Managers see not only numbers, but also the processes behind them.",
+      audienceEyebrow: "Who it fits",
+      audienceTitle:
+        "Built for companies where people, processes, and control matter.",
+      audienceDescription:
+        "This product fits more than one niche. It works well wherever a team needs structure, execution clarity, and analytics.",
+      industries: [
+        "Service companies",
+        "Agencies",
+        "Logistics",
+        "Construction teams",
+        "Companies with field crews",
+      ],
+      featureTeamTitle: "Team management",
+      featureTeamDescription:
+        "Centralize tasks, owners, deadlines, and work status in one place.",
+      featureExecutionTitle: "Execution control",
+      featureExecutionDescription:
+        "Track who did what, where workflows are slowing down, and where intervention is needed.",
+      featureAnalyticsTitle: "Employee analytics",
+      featureAnalyticsDescription:
+        "See productivity, workload, pace, and weak spots for each team member.",
+      featureReportsTitle: "Automated reports",
+      featureReportsDescription:
+        "Create weekly or monthly reports without manually collecting data from multiple tools.",
+      whyWorkEyebrow: "Why it works",
+      whyWorkTitle: "From simple oversight to strategic analytics.",
+      whyWorkBenefits: [
+        "One shared workspace for teams and operations",
+        "Faster progress control without chaos in chats",
+        "Clear analytics for better decisions",
+        "Scalable management without losing control",
+      ],
+      finalTitle: "Ready to make company management simpler and clearer?",
+      finalDescription:
+        "Trackora helps teams stay organized, see outcomes, and reduce daily operational chaos.",
+      finalPrimaryCta: "Create account",
+      finalSecondaryCta: "Contact us",
+    },
     card: {
       pending: "Pending",
       currentWeek: "Current week",
@@ -320,13 +444,23 @@ export const dictionaries = {
     footer: {
       navigationTitle: "Navigation",
       productTitle: "Product",
-      navigation: ["Home", "Sign in", "Sign up", "Employees", "Monthly summary"],
-      notes: ["Hours and rate tracking", "Close a week in one click", "Week history and monthly summaries"],
+      navigation: [
+        "Home",
+        "Sign in",
+        "Sign up",
+        "Employees",
+        "Monthly summary",
+      ],
+      notes: [
+        "Hours and rate tracking",
+        "Close a week in one click",
+        "Week history and monthly summaries",
+      ],
       title: "An operations tracker for teams that work on the move",
       description:
         "A practical workspace for small businesses and service teams: hours, rates, advances, week closing, and monthly summaries.",
       copyright: "Copyright 2026 Trackora. Built for everyday team operations.",
-      version: "Ready to run and adapt to your business v.1.0",
+      version: "Ready to run and adapt to your business BETA v.1.0",
     },
     auth: {
       ownerSignIn: "Workspace sign in",
@@ -352,7 +486,8 @@ export const dictionaries = {
       noAccount: "Do not have an account yet?",
       register: "Register",
       ownerSignUp: "Company registration",
-      signUpTitle: "Create an account and manage your team without spreadsheet chaos",
+      signUpTitle:
+        "Create an account and manage your team without spreadsheet chaos",
       signUpDescription:
         "Create a company workspace and start tracking team operations without a heavy CRM.",
       benefitsSignUp: [
@@ -385,6 +520,12 @@ export const dictionaries = {
       creating: "Creating account...",
       createOwner: "Create company account",
       hasAccount: "Already have an account?",
+      mustAgreeToTerms:
+        "You must agree to the Terms of Service and Privacy Policy",
+      agreeToTermsPrefix: "I agree to the",
+      termsOfService: "Terms of Service",
+      agreeToTermsAnd: "and",
+      privacyPolicy: "Privacy Policy",
     },
   },
   de: {
@@ -444,6 +585,61 @@ export const dictionaries = {
       monthHours: "Stunden diesen Monat",
       monthPending: "Ausstehend diesen Monat",
     },
+    landing: {
+      eyebrow: "CRM für moderne Unternehmen",
+      title: "Verwalte Team, Aufgaben und Mitarbeitendenanalytik an einem Ort.",
+      description:
+        "Trackora ist mehr als nur ein Tool zur Erfassung. Es ist ein Betriebssystem für Unternehmen, die Transparenz bei Aufgaben, Arbeitslasten und datenbasierten Entscheidungen brauchen.",
+      ctaPrimary: "Loslegen",
+      ctaSecondary: "Mehr erfahren",
+      panelTitle: "Was das Produkt bietet",
+      panelBenefit1Title: "Sichtbarkeit der Arbeit",
+      panelBenefit1Description:
+        "Ein lebendiges Bild der Aufgabenerfüllung im gesamten Team.",
+      panelBenefit2Title: "Echtzeit-Analytik",
+      panelBenefit2Description:
+        "Erkenne Engpässe, Überlastung oder Wachstumschancen sofort.",
+      panelBenefit3Title: "Transparenz für die Leitung",
+      panelBenefit3Description:
+        "Managern sind nicht nur Zahlen sichtbar, sondern auch die Prozesse dahinter.",
+      audienceEyebrow: "Für wen es geeignet ist",
+      audienceTitle:
+        "Ideal für Unternehmen, bei denen Menschen, Prozesse und Kontrolle wichtig sind.",
+      audienceDescription:
+        "Dieses Produkt passt nicht nur in eine Nische. Es funktioniert dort, wo ein Team Struktur, klare Ausführung und Analytik braucht.",
+      industries: [
+        "Serviceunternehmen",
+        "Agenturen",
+        "Logistik",
+        "Bau-Teams",
+        "Unternehmen mit Außendienstteams",
+      ],
+      featureTeamTitle: "Teamverwaltung",
+      featureTeamDescription:
+        "Zentralisiere Aufgaben, Zuständigkeiten, Fristen und Status an einem Ort.",
+      featureExecutionTitle: "Ausführungssteuerung",
+      featureExecutionDescription:
+        "Verfolge, wer was erledigt hat, wo Prozesse stocken und wo Eingriffe nötig sind.",
+      featureAnalyticsTitle: "Mitarbeiteranalytik",
+      featureAnalyticsDescription:
+        "Sieh Produktivität, Arbeitsbelastung, Tempo und Schwachstellen jedes Mitarbeitenden.",
+      featureReportsTitle: "Automatische Berichte",
+      featureReportsDescription:
+        "Erstelle wöchentliche oder monatliche Berichte, ohne Daten aus mehreren Tools manuell zusammenzutragen.",
+      whyWorkEyebrow: "Warum es funktioniert",
+      whyWorkTitle: "Vom einfachen Überblick zur strategischen Analytik.",
+      whyWorkBenefits: [
+        "Ein gemeinsamer Raum für Team und Betrieb",
+        "Schnellere Fortschrittskontrolle ohne Chaos in Chats",
+        "Klare Analytik für bessere Entscheidungen",
+        "Skalierbare Verwaltung ohne Kontrolle zu verlieren",
+      ],
+      finalTitle: "Bereit, Unternehmensführung einfacher und klarer zu machen?",
+      finalDescription:
+        "Trackora hilft Teams, organisiert zu bleiben, Ergebnisse zu sehen und den Alltag im Betrieb zu vereinfachen.",
+      finalPrimaryCta: "Konto erstellen",
+      finalSecondaryCta: "Kontaktieren Sie uns",
+    },
     card: {
       pending: "Ausstehend",
       currentWeek: "Aktuelle Woche",
@@ -451,7 +647,8 @@ export const dictionaries = {
       advances: "Vorschüsse",
       gross: "Bruttolohn",
       month: "Dieser Monat",
-      details: "Klicken, um Details, Wochenverlauf und Monatsübersicht zu sehen",
+      details:
+        "Klicken, um Details, Wochenverlauf und Monatsübersicht zu sehen",
     },
     details: {
       eyebrow: "Mitarbeiterdetails",
@@ -463,7 +660,8 @@ export const dictionaries = {
       dangerDescription:
         "Wenn dieser Mitarbeiter nicht mehr benötigt wird, kannst du ihn mit aktuellen Daten und Verlauf entfernen.",
       deleteEmployee: "Mitarbeiter löschen",
-      confirmDelete: "Mitarbeiter {name} löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      confirmDelete:
+        "Mitarbeiter {name} löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
       currentWeek: "Aktuelle Woche",
       currentWeekDescription:
         "Tägliche Stunden werden automatisch summiert und Beträge sofort aktualisiert.",
@@ -500,13 +698,24 @@ export const dictionaries = {
     footer: {
       navigationTitle: "Navigation",
       productTitle: "Produkt",
-      navigation: ["Start", "Anmelden", "Registrieren", "Mitarbeiter", "Monatsübersicht"],
-      notes: ["Stunden- und Satzverwaltung", "Woche mit einem Klick schließen", "Wochenverlauf und Monatsübersichten"],
+      navigation: [
+        "Start",
+        "Anmelden",
+        "Registrieren",
+        "Mitarbeiter",
+        "Monatsübersicht",
+      ],
+      notes: [
+        "Stunden- und Satzverwaltung",
+        "Woche mit einem Klick schließen",
+        "Wochenverlauf und Monatsübersichten",
+      ],
       title: "Ein Operations-Tracker für Teams, die unterwegs arbeiten",
       description:
         "Ein praktischer Arbeitsbereich für kleine Unternehmen und Serviceteams: Stunden, Sätze, Vorschüsse, Wochenabschluss und Monatsübersichten.",
       copyright: "© 2026 Trackora. Entwickelt für echte tägliche Verwaltung.",
-      version: "Bereit für den Einsatz und anpassbar an dein Geschäft v.1.0",
+      version:
+        "Bereit für den Einsatz und anpassbar an dein Geschäft BETA v.1.0",
     },
     auth: {
       ownerSignIn: "Anmeldung im Arbeitsbereich",
@@ -532,7 +741,8 @@ export const dictionaries = {
       noAccount: "Noch kein Konto?",
       register: "Registrieren",
       ownerSignUp: "Unternehmen registrieren",
-      signUpTitle: "Erstelle ein Konto und verwalte dein Team ohne Tabellenchaos",
+      signUpTitle:
+        "Erstelle ein Konto und verwalte dein Team ohne Tabellenchaos",
       signUpDescription:
         "Erstelle einen Arbeitsbereich für dein Unternehmen und starte die Teamverwaltung ohne schwere CRM-Lösung.",
       benefitsSignUp: [
@@ -558,13 +768,21 @@ export const dictionaries = {
       repeatPasswordPlaceholder: "Passwort wiederholen",
       passwordsMismatch: "Passwörter stimmen nicht überein.",
       passwordTooShort: "Das Passwort muss mindestens 8 Zeichen enthalten.",
-      profileSignInError: "Das Unternehmensprofil konnte nicht vorbereitet werden.",
-      profileSignUpError: "Das Unternehmensprofil konnte nicht erstellt werden.",
+      profileSignInError:
+        "Das Unternehmensprofil konnte nicht vorbereitet werden.",
+      profileSignUpError:
+        "Das Unternehmensprofil konnte nicht erstellt werden.",
       success:
         "Konto erstellt. Prüfe dein Postfach und bestätige die E-Mail, falls es erforderlich ist.",
       creating: "Konto wird erstellt...",
       createOwner: "Unternehmenskonto erstellen",
       hasAccount: "Du hast bereits ein Konto?",
+      mustAgreeToTerms:
+        "Sie müssen den Nutzungsbedingungen und der Datenschutzerklärung zustimmen",
+      agreeToTermsPrefix: "Ich stimme den",
+      termsOfService: "Nutzungsbedingungen",
+      agreeToTermsAnd: "und der",
+      privacyPolicy: "Datenschutzerklärung",
     },
   },
   pl: {
@@ -624,6 +842,63 @@ export const dictionaries = {
       monthHours: "Godziny w miesiącu",
       monthPending: "Do wypłaty za miesiąc",
     },
+    landing: {
+      eyebrow: "CRM dla nowoczesnych firm",
+      title:
+        "Zarządzaj zespołem, zadaniami i analizą pracowników w jednym miejscu.",
+      description:
+        "Trackora to coś więcej niż narzędzie do ewidencji. To system operacyjny dla firm, które potrzebują widoczności wykonania pracy, obciążenia zespołu i decyzji opartych na danych.",
+      ctaPrimary: "Rozpocznij",
+      ctaSecondary: "Dowiedz się więcej",
+      panelTitle: "Co daje produkt",
+      panelBenefit1Title: "Widoczność pracy",
+      panelBenefit1Description:
+        "Żywy obraz realizacji zadań dla całego zespołu.",
+      panelBenefit2Title: "Analityka na żywo",
+      panelBenefit2Description:
+        "Zobacz, gdzie pojawiają się wąskie gardła, przeciążenia lub szanse rozwoju.",
+      panelBenefit3Title: "Przejrzystość dla zarządu",
+      panelBenefit3Description:
+        "Kierownicy widzą nie tylko liczby, ale i procesy stojące za nimi.",
+      audienceEyebrow: "Dla kogo jest odpowiedni",
+      audienceTitle:
+        "Dla firm, w których liczą się ludzie, procesy i kontrola.",
+      audienceDescription:
+        "Ten produkt pasuje nie tylko do jednej niszy. Dobrze działa tam, gdzie zespół potrzebuje porządku, przejrzystości realizacji i analityki.",
+      industries: [
+        "Firmy usługowe",
+        "Agencje",
+        "Logistyka",
+        "Zespoły budowlane",
+        "Firmy z zespołami terenowymi",
+      ],
+      featureTeamTitle: "Zarządzanie zespołem",
+      featureTeamDescription:
+        "Skonsoliduj zadania, odpowiedzialnych, terminy i status pracy w jednym miejscu.",
+      featureExecutionTitle: "Kontrola wykonania",
+      featureExecutionDescription:
+        "Śledź, kto co zrobił, gdzie procesy się spowalniają i gdzie potrzebna jest interwencja.",
+      featureAnalyticsTitle: "Analityka pracowników",
+      featureAnalyticsDescription:
+        "Zobacz produktywność, obciążenie, tempo pracy i słabe punkty każdego pracownika.",
+      featureReportsTitle: "Automatyczne raporty",
+      featureReportsDescription:
+        "Twórz tygodniowe lub miesięczne raporty bez ręcznego zbierania danych z wielu narzędzi.",
+      whyWorkEyebrow: "Dlaczego to działa",
+      whyWorkTitle: "Od prostego nadzoru do strategicznej analityki.",
+      whyWorkBenefits: [
+        "Jedna przestrzeń do pracy zespołu i operacji",
+        "Szybsza kontrola postępu bez chaosu w czatach",
+        "Jasna analityka do lepszych decyzji",
+        "Skalowalne zarządzanie bez utraty kontroli",
+      ],
+      finalTitle:
+        "Gotowi, by zarządzanie firmą było prostsze i bardziej przejrzyste?",
+      finalDescription:
+        "Trackora pomaga zarządzać zespołem, widzieć efekty pracy i ograniczać chaos w codziennych procesach.",
+      finalPrimaryCta: "Utwórz konto",
+      finalSecondaryCta: "Skontaktuj się z nami",
+    },
     card: {
       pending: "Do wypłaty",
       currentWeek: "Bieżący tydzień",
@@ -631,7 +906,8 @@ export const dictionaries = {
       advances: "Zaliczki",
       gross: "Naliczono",
       month: "Za miesiąc",
-      details: "Kliknij, aby zobaczyć szczegóły, historię tygodni i podsumowanie miesiąca",
+      details:
+        "Kliknij, aby zobaczyć szczegóły, historię tygodni i podsumowanie miesiąca",
     },
     details: {
       eyebrow: "Szczegóły pracownika",
@@ -680,13 +956,23 @@ export const dictionaries = {
     footer: {
       navigationTitle: "Nawigacja",
       productTitle: "Produkt",
-      navigation: ["Główna", "Logowanie", "Rejestracja", "Pracownicy", "Podsumowanie miesiąca"],
-      notes: ["Ewidencja godzin i stawek", "Zamknięcie tygodnia jednym kliknięciem", "Historia tygodni i podsumowania miesiąca"],
+      navigation: [
+        "Główna",
+        "Logowanie",
+        "Rejestracja",
+        "Pracownicy",
+        "Podsumowanie miesiąca",
+      ],
+      notes: [
+        "Ewidencja godzin i stawek",
+        "Zamknięcie tygodnia jednym kliknięciem",
+        "Historia tygodni i podsumowania miesiąca",
+      ],
       title: "Tracker operacyjny dla zespołów pracujących w terenie",
       description:
         "Praktyczna przestrzeń dla małych firm i zespołów usługowych: godziny, stawki, zaliczki, zamknięcie tygodnia i podsumowania miesiąca.",
       copyright: "© 2026 Trackora. Stworzone do realnej codziennej ewidencji.",
-      version: "Gotowe do pracy i dopasowania do Twojej firmy v.1.0",
+      version: "Gotowe do pracy i dopasowania do Twojej firmy BETA v.1.0",
     },
     auth: {
       ownerSignIn: "Logowanie do panelu",
@@ -745,6 +1031,11 @@ export const dictionaries = {
       creating: "Tworzymy konto...",
       createOwner: "Utwórz konto firmy",
       hasAccount: "Masz już konto?",
+      mustAgreeToTerms: "Musisz zaakceptować Regulamin i Politykę prywatności",
+      agreeToTermsPrefix: "Akceptuję",
+      termsOfService: "Regulamin",
+      agreeToTermsAnd: "oraz",
+      privacyPolicy: "Politykę prywatności",
     },
   },
 } as const;

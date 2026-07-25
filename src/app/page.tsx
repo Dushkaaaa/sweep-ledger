@@ -1,11 +1,29 @@
-import { EmployeesSection } from "./_components/employees-section";
-import { SiteFooter } from "./_components/site-footer";
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
-export default function Home() {
-  return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_18%_0%,_rgba(34,211,238,0.34)_0%,_rgba(224,247,255,0.74)_32%,_transparent_62%),linear-gradient(135deg,_#effcff_0%,_#dff7fb_42%,_#eef8ff_100%)]">
-      <EmployeesSection />
-      <SiteFooter />
-    </main>
-  );
+const supportedLanguages = ["uk", "en", "pl", "de"] as const;
+type SupportedLanguage = (typeof supportedLanguages)[number];
+
+function detectLanguage(acceptLanguage: string | null): SupportedLanguage {
+  if (!acceptLanguage) return "en";
+
+  const preferred = acceptLanguage
+    .split(",")
+    .map((part) => part.split(";")[0].trim().split("-")[0].toLowerCase());
+
+  for (const lang of preferred) {
+    if (supportedLanguages.includes(lang as SupportedLanguage)) {
+      return lang as SupportedLanguage;
+    }
+  }
+
+  return "uk"; // дефолт, якщо мова браузера не підтримується
+}
+
+export default async function RootPage() {
+  const headersList = await headers();
+  const acceptLanguage = headersList.get("accept-language");
+  const lang = detectLanguage(acceptLanguage);
+
+  redirect(`/${lang}`);
 }

@@ -6,12 +6,13 @@ import { useState } from "react";
 import { LanguageSwitcher } from "../_components/language-switcher";
 import { SiteFooter } from "../_components/site-footer";
 import { useLanguage } from "../_i18n/language-provider";
+import { getWorkspaceRoute } from "../_i18n/route-utils";
 import { supabase } from "@/lib/supabase/client";
 import { ensureProfile } from "@/lib/supabase/profiles";
 
 export default function SignInPage() {
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -47,7 +48,8 @@ export default function SignInPage() {
       }
     }
 
-    router.push("/");
+    const workspaceRoute = getWorkspaceRoute(data.user.id);
+    router.push(workspaceRoute);
     router.refresh();
   }
 
@@ -58,7 +60,7 @@ export default function SignInPage() {
           <div>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <Link
-                href="/"
+                href={`/${language}`}
                 className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white/90 transition hover:bg-white/15"
               >
                 {t.common.backToTracker}
@@ -109,7 +111,9 @@ export default function SignInPage() {
           </div>
 
           <div>
-            <p className="text-sm font-medium text-sky-600">{t.auth.authTitle}</p>
+            <p className="text-sm font-medium text-sky-600">
+              {t.auth.authTitle}
+            </p>
             <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
               {t.auth.signInFormTitle}
             </h2>

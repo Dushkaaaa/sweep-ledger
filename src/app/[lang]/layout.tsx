@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-const supportedLanguages = ["uk", "en", "pl"] as const;
+const supportedLanguages = ["uk", "en", "pl", "de"] as const;
 
 type SupportedLanguage = (typeof supportedLanguages)[number];
 
@@ -39,6 +39,21 @@ export async function generateMetadata({
         "Trackora pomaga zarządzać pracownikami, godzinami, wypłatami, zaliczkami i raportami dla firm sprzątania.",
       locale: "pl_PL",
     },
+    de: {
+    title: "Trackora — CRM für Reinigungsunternehmen",
+    description:
+      "Trackora hilft Reinigungsunternehmen, Mitarbeiter, Arbeitsstunden, Auszahlungen, Vorschüsse und Berichte zu verwalten.",
+    locale: "de_DE",
+    },
+    alternates: {
+  canonical: `/${lang}`,
+  languages: {
+    "uk-UA": "/uk",
+    "en-US": "/en",
+    "pl-PL": "/pl",
+    "de-DE": "/de",
+  },
+},
   } as const;
 
   const content = metadataByLang[lang];

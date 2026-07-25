@@ -9,6 +9,7 @@ import {
   ClientsPanel,
   EmployeesPanel,
   ReportPanel,
+  StatisticsPanel,
 } from "../workspace-panels";
 import type { useEmployeesWorkspace } from "./use-employees-workspace";
 
@@ -184,6 +185,12 @@ function WorkspaceActivePanel({
         onToggleCompleted={onToggleClientOrderCompletion}
         onToggleTransferred={onToggleClientOrderTransfer}
       />
+    );
+  }
+
+  if (activeSection === "statistics") {
+    return (
+      <StatisticsPanel copy={copy} employees={employees} onBack={onBack} />
     );
   }
 

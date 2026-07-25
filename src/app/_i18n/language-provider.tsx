@@ -71,11 +71,11 @@ function subscribeToLanguageChanges(onStoreChange: () => void) {
   };
 }
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
+export function LanguageProvider({ children, initialLanguage }: { children: ReactNode, initialLanguage?: LanguageCode }) {
   const language = useSyncExternalStore(
     subscribeToLanguageChanges,
-    getLanguageSnapshot,
-    getServerLanguageSnapshot,
+    () => (initialLanguage ? initialLanguage : getLanguageSnapshot()),
+    () => (initialLanguage ? initialLanguage : getServerLanguageSnapshot()),
   );
 
   function setLanguageState(nextLanguage: LanguageCode) {
@@ -86,6 +86,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     window.localStorage.setItem(storageKey, language);
     document.documentElement.lang = language;
+    window.dispatchEvent(new Event(languageChangeEvent));
   }, [language]);
 
   const value = useMemo(
