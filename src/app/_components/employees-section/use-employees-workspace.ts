@@ -2,6 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import type { FinanceEntry, NewFinanceEntryInput } from "../../_data/finance";
+import {
+  createFinanceEntryForOwner,
+  deleteFinanceEntryById,
+  fetchFinanceEntriesForOwner,
+} from "@/lib/supabase/finance";
 import type { Session } from "@supabase/supabase-js";
 
 import {
@@ -72,6 +78,7 @@ export function useEmployeesWorkspace() {
   );
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [clientOrders, setClientOrders] = useState<ClientOrder[]>([]);
+  const [financeEntries, setFinanceEntries] = useState<FinanceEntry[]>([]); /// new
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(
     null,
   );
@@ -94,11 +101,14 @@ export function useEmployeesWorkspace() {
       activeSession: Session | null,
       fallbackCompanyName = trackerName,
     ) => {
-      const [profile, employeeList, orderList] = await Promise.all([
-        fetchProfile(ownerId),
-        fetchEmployeesForOwner(ownerId),
-        fetchClientOrdersForOwner(ownerId),
-      ]);
+      const [profile, employeeList, orderList, financeList] = await Promise.all(
+        [
+          fetchProfile(ownerId),
+          fetchEmployeesForOwner(ownerId),
+          fetchClientOrdersForOwner(ownerId),
+          fetchFinanceEntriesForOwner(ownerId),
+        ],
+      );
 
       setCompanyName(
         profile?.company_name ??
@@ -118,6 +128,7 @@ export function useEmployeesWorkspace() {
       setCompanyLogoDataUrl(profile?.logo_data_url ?? null);
       setEmployees(employeeList);
       setClientOrders(orderList.map((order) => normalizeClientOrder(order)));
+      setFinanceEntries(financeList);
     },
     [setLanguage],
   );
@@ -147,6 +158,7 @@ export function useEmployeesWorkspace() {
       if (!currentSession?.user) {
         setEmployees([]);
         setClientOrders([]);
+        setFinanceEntries([]);
         setCompanyName(trackerName);
         setCompanyLogoDataUrl(null);
         setIsLoading(false);
@@ -178,6 +190,7 @@ export function useEmployeesWorkspace() {
       if (!nextSession?.user) {
         setEmployees([]);
         setClientOrders([]);
+        setFinanceEntries([]);
         setSelectedEmployeeId(null);
         setCompanyName(trackerName);
         setCompanyLogoDataUrl(null);
@@ -327,6 +340,44 @@ export function useEmployeesWorkspace() {
       await deleteClientOrderById(orderId);
       setClientOrders((current) =>
         current.filter((order) => order.id !== orderId),
+      );
+    } catch (error) {
+      setErrorMessage(getErrorMessage(error));
+    } finally {
+      setIsSaving(false);
+    }
+  }
+  /// new function
+  async function handleCreateFinanceEntry(entry: NewFinanceEntryInput) {
+    if (!session?.user) {
+      return;
+    }
+
+    setIsSaving(true);
+    setErrorMessage("");
+
+    try {
+      const createdEntry = await createFinanceEntryForOwner(
+        session.user.id,
+        entry,
+      );
+
+      setFinanceEntries((current) => [createdEntry, ...current]);
+    } catch (error) {
+      setErrorMessage(getErrorMessage(error));
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function handleDeleteFinanceEntry(entryId: string) {
+    setIsSaving(true);
+    setErrorMessage("");
+
+    try {
+      await deleteFinanceEntryById(entryId);
+      setFinanceEntries((current) =>
+        current.filter((entry) => entry.id !== entryId),
       );
     } catch (error) {
       setErrorMessage(getErrorMessage(error));
@@ -513,6 +564,7 @@ export function useEmployeesWorkspace() {
     copy,
     employees,
     errorMessage,
+    financeEntries, // нове
     isCreatingEmployee,
     isLoading,
     isSaving,
@@ -527,8 +579,10 @@ export function useEmployeesWorkspace() {
       closeWeek: handleCloseWeek,
       createClientOrder: handleCreateClientOrder,
       createEmployee: handleCreateEmployee,
+      createFinanceEntry: handleCreateFinanceEntry, // нове
       deleteClientOrder: handleDeleteClientOrder,
       deleteEmployee: handleDeleteEmployee,
+      deleteFinanceEntry: handleDeleteFinanceEntry, // нове
       downloadMonthlyReport: handleDownloadMonthlyReport,
       removeAdvance: handleRemoveAdvance,
       saveCompanyLogo: handleSaveCompanyLogo,

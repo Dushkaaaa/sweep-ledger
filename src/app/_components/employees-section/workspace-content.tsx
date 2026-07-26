@@ -8,9 +8,10 @@ import {
   CabinetMenu,
   ClientsPanel,
   EmployeesPanel,
+  FinancePanel,
   ReportPanel,
   StatisticsPanel,
-} from "../workspace-panels";
+} from "../workspace-panels/index";
 import type { useEmployeesWorkspace } from "./use-employees-workspace";
 
 type Workspace = ReturnType<typeof useEmployeesWorkspace>;
@@ -28,6 +29,7 @@ export function WorkspaceContent({ workspace }: WorkspaceContentProps) {
     copy,
     employees,
     errorMessage,
+    financeEntries,
     isCreatingEmployee,
     isSaving,
     language,
@@ -56,6 +58,7 @@ export function WorkspaceContent({ workspace }: WorkspaceContentProps) {
           copy={copy}
           employees={employees}
           errorMessage={errorMessage}
+          financeEntries={financeEntries}
           isSaving={isSaving}
           companyLogoDataUrl={companyLogoDataUrl}
           language={language}
@@ -66,7 +69,9 @@ export function WorkspaceContent({ workspace }: WorkspaceContentProps) {
           onCloseWeek={actions.closeWeek}
           onCreateClientOrder={actions.createClientOrder}
           onCreateEmployee={() => actions.setIsCreatingEmployee(true)}
+          onCreateFinanceEntry={actions.createFinanceEntry}
           onDeleteClientOrder={actions.deleteClientOrder}
+          onDeleteFinanceEntry={actions.deleteFinanceEntry}
           onDownloadMonthlyReport={actions.downloadMonthlyReport}
           onToggleClientOrderCompletion={actions.toggleClientOrderCompletion}
           onToggleClientOrderTransfer={actions.toggleClientOrderTransfer}
@@ -101,6 +106,7 @@ function WorkspaceActivePanel({
   copy,
   employees,
   errorMessage,
+  financeEntries,
   isSaving,
   companyLogoDataUrl,
   language,
@@ -111,7 +117,9 @@ function WorkspaceActivePanel({
   onCloseWeek,
   onCreateClientOrder,
   onCreateEmployee,
+  onCreateFinanceEntry,
   onDeleteClientOrder,
+  onDeleteFinanceEntry,
   onDownloadMonthlyReport,
   onToggleClientOrderCompletion,
   onToggleClientOrderTransfer,
@@ -125,6 +133,7 @@ function WorkspaceActivePanel({
   copy: CabinetCopy;
   employees: Workspace["employees"];
   errorMessage: string;
+  financeEntries: Workspace["financeEntries"];
   isSaving: boolean;
   companyLogoDataUrl: string | null;
   language: LanguageCode;
@@ -135,7 +144,9 @@ function WorkspaceActivePanel({
   onCloseWeek: () => void;
   onCreateClientOrder: Workspace["actions"]["createClientOrder"];
   onCreateEmployee: () => void;
+  onCreateFinanceEntry: Workspace["actions"]["createFinanceEntry"];
   onDeleteClientOrder: Workspace["actions"]["deleteClientOrder"];
+  onDeleteFinanceEntry: Workspace["actions"]["deleteFinanceEntry"];
   onDownloadMonthlyReport: () => void;
   onNavigate: (section: CabinetSection) => void;
   onSaveLogo: Workspace["actions"]["saveCompanyLogo"];
@@ -184,6 +195,21 @@ function WorkspaceActivePanel({
         onDeleteOrder={onDeleteClientOrder}
         onToggleCompleted={onToggleClientOrderCompletion}
         onToggleTransferred={onToggleClientOrderTransfer}
+      />
+    );
+  }
+
+  if (activeSection === "finance") {
+    return (
+      <FinancePanel
+        copy={copy}
+        t={t}
+        entries={financeEntries}
+        isSaving={isSaving}
+        onBack={onBack}
+        language={language}
+        onCreateEntry={onCreateFinanceEntry}
+        onDeleteEntry={onDeleteFinanceEntry}
       />
     );
   }
