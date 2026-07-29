@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useLanguage } from "../_i18n/language-provider";
 import { useConsent } from "../providers/consent-provider";
+import { FaXTwitter, FaLinkedin } from "react-icons/fa6";
 
 const hrefs = ["/", "/sign-in", "/sign-up", "/", "/"];
 
@@ -50,6 +51,19 @@ export function SiteFooter() {
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <div className="flex flex-wrap gap-4 flex-col">
             <p>{t.footer.copyright}</p>
+            <div>
+              <p>{t.footer.createdBy}</p>
+
+              <div className="flex items-center gap-2">
+                <a href="https://x.com/y_dushkaaa">
+                  <FaXTwitter size={20} />
+                </a>
+
+                <a href="https://www.linkedin.com/in/yevhenii-dushkevych-17a992334">
+                  <FaLinkedin size={20} />
+                </a>
+              </div>
+            </div>
 
             <div className="flex flex-col gap-4">
               <Link

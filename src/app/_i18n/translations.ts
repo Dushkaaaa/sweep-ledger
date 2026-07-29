@@ -208,7 +208,8 @@ export const dictionaries = {
       title: "Операційний трекер для команд, які працюють у русі",
       description:
         "Зручний кабінет для малого бізнесу та сервісних команд: години, ставки, аванси, закриття тижня та підсумки за місяць.",
-      copyright: "© 2026 Trackora. Зроблено для реального щоденного обліку.",
+      copyright: "© 2026 Trackora. Зроблено для вашого щоденного обліку.",
+      createdBy: "Built by Yevhenii Dushkevych",
       version: "Готово для роботи та адаптації під ваш бізнес BETA v.1.0",
     },
     auth: {
@@ -459,7 +460,8 @@ export const dictionaries = {
       title: "An operations tracker for teams that work on the move",
       description:
         "A practical workspace for small businesses and service teams: hours, rates, advances, week closing, and monthly summaries.",
-      copyright: "Copyright 2026 Trackora. Built for everyday team operations.",
+      copyright: "© 2026 Trackora. Built for your daily tracking.",
+      createdBy: "Built by Yevhenii Dushkevych",
       version: "Ready to run and adapt to your business BETA v.1.0",
     },
     auth: {
@@ -713,7 +715,8 @@ export const dictionaries = {
       title: "Ein Operations-Tracker für Teams, die unterwegs arbeiten",
       description:
         "Ein praktischer Arbeitsbereich für kleine Unternehmen und Serviceteams: Stunden, Sätze, Vorschüsse, Wochenabschluss und Monatsübersichten.",
-      copyright: "© 2026 Trackora. Entwickelt für echte tägliche Verwaltung.",
+      copyright: "© 2026 Trackora. Entwickelt für Ihre tägliche Erfassung.",
+      createdBy: "Built by Yevhenii Dushkevych",
       version:
         "Bereit für den Einsatz und anpassbar an dein Geschäft BETA v.1.0",
     },
@@ -971,7 +974,8 @@ export const dictionaries = {
       title: "Tracker operacyjny dla zespołów pracujących w terenie",
       description:
         "Praktyczna przestrzeń dla małych firm i zespołów usługowych: godziny, stawki, zaliczki, zamknięcie tygodnia i podsumowania miesiąca.",
-      copyright: "© 2026 Trackora. Stworzone do realnej codziennej ewidencji.",
+      copyright: "© 2026 Trackora. Stworzone dla Twojej codziennej ewidencji.",
+      createdBy: "Built by Yevhenii Dushkevych",
       version: "Gotowe do pracy i dopasowania do Twojej firmy BETA v.1.0",
     },
     auth: {
